@@ -23,8 +23,16 @@ func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order stri
 	db := global.GVA_DB.Model(&model.ZhihuGoods{})
 	var goodsList []model.ZhihuGoods
 
+	if goods.SkuID != "" {
+		db = db.Where("sku_id LIKE ?", "%"+goods.SkuID+"%")
+	}
+
 	if goods.SkuName != "" {
 		db = db.Where("sku_name LIKE ?", "%"+goods.SkuName+"%")
+	}
+
+	if goods.ThirdCategory != "" {
+		db = db.Where("cid3_name LIKE ?", "%"+goods.ThirdCategory+"%")
 	}
 
 	err = db.Count(&total).Error

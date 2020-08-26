@@ -2,20 +2,20 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="路径">
-          <el-input placeholder="路径" v-model="searchInfo.path"></el-input>
+        <el-form-item label="sku">
+          <el-input placeholder="sku" v-model="searchInfo.sku_id"></el-input>
         </el-form-item>
-        <el-form-item label="描述">
-          <el-input placeholder="描述" v-model="searchInfo.description"></el-input>
+        <el-form-item label="商品名">
+          <el-input placeholder="商品名" v-model="searchInfo.sku_name"></el-input>
         </el-form-item>
-        <el-form-item label="api组">
-          <el-input placeholder="api组" v-model="searchInfo.apiGroup"></el-input>
+        <el-form-item label="佣金比(小于)">
+          <el-input placeholder="佣金比" v-model="searchInfo.fee_rate"></el-input>
         </el-form-item>
-        <el-form-item label="请求">
-          <el-select clearable placeholder="请选择" v-model="searchInfo.method">
+        <el-form-item label="品类">
+          <el-select clearable placeholder="请选择" v-model="searchInfo.third_category">
             <el-option
               :key="item.value"
-              :label="`${item.label}(${item.value})`"
+              :label="`${item.label}`"
               :value="item.value"
               v-for="item in methodOptions"
             ></el-option>
@@ -25,17 +25,31 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog('addApi')" type="primary">新增api</el-button>
+          <el-button @click="openDialog('addApi')" type="primary">新增商品</el-button>
         </el-form-item>
       </el-form>
     </div>
     <el-table :data="tableData" @sort-change="sortChange" border stripe>
-      <el-table-column label="id" min-width="60" prop="ID" sortable="custom"></el-table-column>
-      <el-table-column label="sku" min-width="150" prop="sku_id" sortable="custom"></el-table-column>
-      <el-table-column label="商品名" min-width="150" prop="sku_name" sortable="custom"></el-table-column>
-      <el-table-column label="价格" min-width="150" prop="price" sortable="custom"></el-table-column>
-      <el-table-column label="佣金" min-width="150" prop="fee" sortable="custom"></el-table-column>
-
+      <el-table-column label="id" min-width="50" prop="ID" sortable="custom"></el-table-column>
+      <el-table-column label="sku" min-width="80" sortable="custom">
+        <template slot-scope="scope">
+          <a :href="'http://item.jd.com/' + scope.row.sku_id + '.html'" target="_blank" style="color:#606266">
+            {{scope.row.sku_id}}
+          </a>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品名" min-width="200" sortable="custom">
+        <template slot-scope="scope">
+          <a :href="'https://union.jd.com/proManager/index?pageNo=1&keywords=' + scope.row.sku_id" target="_blank" style="color:#606266">
+            {{scope.row.sku_name}}
+          </a>
+        </template>
+      </el-table-column>
+      <el-table-column label="价格" min-width="50" prop="price" sortable="custom"></el-table-column>
+      <el-table-column label="佣金比" min-width="50" prop="fee_rate" sortable="custom"></el-table-column>
+      <el-table-column label="佣金" min-width="50" prop="fee" sortable="custom"></el-table-column>
+      <el-table-column label="品类" min-width="50" prop="third_category" sortable="custom"></el-table-column>
+      <el-table-column label="是否自营" min-width="50" prop="jd_sale" sortable="custom"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="editApi(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
@@ -46,7 +60,7 @@
     <el-pagination
       :current-page="page"
       :page-size="pageSize"
-      :page-sizes="[10, 30, 50, 100]"
+      :page-sizes="[30, 50, 100]"
       :style="{float:'right',padding:'20px'}"
       :total="total"
       @current-change="handleCurrentChange"
@@ -100,35 +114,25 @@ import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
 const methodOptions = [
   {
-    value: 'POST',
-    label: '创建',
-    type: 'success'
-  },
-  {
-    value: 'GET',
-    label: '查看',
+    value: '乳胶枕',
+    label: '乳胶枕',
     type: ''
   },
   {
-    value: 'PUT',
-    label: '更新',
-    type: 'warning'
-  },
-  {
-    value: 'DELETE',
-    label: '删除',
-    type: 'danger'
+    value: '按摩',
+    label: '按摩器',
+    type: ''
   }
 ]
 
 export default {
-  name: 'Api',
+  name: 'Goods',
   mixins: [infoList],
   data() {
     return {
       listApi: getGoodsList,
       dialogFormVisible: false,
-      dialogTitle: '新增Api',
+      dialogTitle: '新增商品',
       form: {
         path: '',
         apiGroup: '',
@@ -163,16 +167,15 @@ export default {
     //条件搜索前端看此方法
     onSubmit() {
       this.page = 1
-      this.pageSize = 10
+      this.pageSize = 20
       this.getTableData()
     },
     initForm() {
       this.$refs.apiForm.resetFields()
       this.form= {
-        path: '',
-        apiGroup: '',
-        method: '',
-        description: ''
+        sku_id: '',
+        sku_name: '',
+        third_category: ''
       }
     },
     closeDialog() {
