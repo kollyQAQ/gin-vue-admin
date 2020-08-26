@@ -13,7 +13,7 @@ mysql:
     username: kolly
     password: 'Kolly@123456'
     path: '120.24.109.181:3306'
-    db-name: 'qmPlus'
+    db-name: 'wx-robot'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10
