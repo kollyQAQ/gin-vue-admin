@@ -15,7 +15,11 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 		ApiRouter.POST("createGoods", v1.CreateGoods)   // 创建新商品
 		ApiRouter.POST("updateGoods", v1.UpdateGoods)   // 修改商品信息
 
-		ApiRouter.POST("getQaList", v1.GetQuestionAnswer)     // 获取商品列表
-		ApiRouter.POST("getCollectionList", v1.GetCollection) // 获取收藏列表
+		ApiRouter.POST("getQaList", v1.GetQuestionAnswer) // 获取问答列表
+
+		ApiRouter.POST("getCollectionList", v1.GetCollection)     // 获取收藏列表
+		ApiRouter.POST("getCollectionById", v1.GetCollectionById) // 更新单个收藏信息
+		ApiRouter.POST("createCollection", v1.CreateCollection)   // 创建新收藏
+		ApiRouter.POST("updateCollection", v1.UpdateCollection)   // 修改收藏信息
 	}
 }

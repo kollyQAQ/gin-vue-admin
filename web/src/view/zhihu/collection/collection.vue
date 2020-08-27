@@ -16,7 +16,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog('addApi')" type="primary">新增商品</el-button>
+          <el-button @click="openDialog('add')" type="primary">新增收藏</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -50,11 +50,8 @@
 
     <el-dialog :before-close="closeDialog" :title="dialogTitle" :visible.sync="dialogFormVisible">
       <el-form :inline="true" :model="form" :rules="rules" label-width="80px" ref="apiForm">
-        <el-form-item label="路径" prop="path">
-          <el-input autocomplete="off" v-model="form.path"></el-input>
-        </el-form-item>
-        <el-form-item label="请求" prop="method">
-          <el-select placeholder="请选择" v-model="form.method">
+        <el-form-item label="类型" prop="type">
+          <el-select placeholder="请选择" v-model="form.type">
             <el-option
               :key="item.value"
               :label="`${item.label}(${item.value})`"
@@ -63,14 +60,23 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="api分组" prop="apiGroup">
-          <el-input autocomplete="off" v-model="form.apiGroup"></el-input>
+        <el-form-item label="内容" prop="type">
+          <el-input autocomplete="off" v-model="form.title"></el-input>
         </el-form-item>
-        <el-form-item label="api简介" prop="description">
-          <el-input autocomplete="off" v-model="form.description"></el-input>
+        <el-form-item label="链接" prop="apiGroup">
+          <el-input autocomplete="off" v-model="form.url"></el-input>
+        </el-form-item>
+        <el-form-item label="作者" prop="description">
+          <el-input autocomplete="off" v-model="form.author"></el-input>
         </el-form-item>
       </el-form>
-      <div class="warning">新增Api需要在角色管理内配置权限才可使用</div>
+      <div class="edit_container">
+        <quill-editor
+                :options="{}"
+                ref="myQuillEditor"
+                v-model="form.remark"
+        ></quill-editor>
+      </div>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -84,36 +90,33 @@
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
 
 import {
-  getApiById,
-  createApi,
-  updateApi,
-  deleteApi
-} from '@/api/api'
-
-import {
-  getCollectionList
+  getCollectionList,
+  getCollectionById,
+  createCollection,
+  updateCollection,
+  deleteCollection,
 } from "../../../api/collection";
 
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
 const methodOptions = [
   {
-    value: '用户',
+    value: 'A用户',
     label: '用户',
     type: ''
   },
   {
-    value: '专栏',
+    value: 'B专栏',
     label: '专栏',
     type: ''
   },
   {
-    value: '文章',
+    value: 'C文章',
     label: '文章',
     type: ''
   },
   {
-    value: '回答',
+    value: 'D回答',
     label: '回答',
     type: ''
   },
@@ -133,23 +136,24 @@ export default {
       dialogFormVisible: false,
       dialogTitle: '新增收藏',
       form: {
-        path: '',
-        apiGroup: '',
-        method: '',
-        description: ''
+        type: '',
+        title: '',
+        url: '',
+        author: '',
+        remark: ''
       },
       methodOptions: methodOptions,
       type: '',
       rules: {
-        path: [{ required: true, message: '请输入api路径', trigger: 'blur' }],
-        apiGroup: [
-          { required: true, message: '请输入组名称', trigger: 'blur' }
+        type: [{ required: true, message: '请输入type', trigger: 'blur' }],
+        title: [
+          { required: true, message: '请输入title', trigger: 'blur' }
         ],
-        method: [
-          { required: true, message: '请选择请求方式', trigger: 'blur' }
+        url: [
+          { required: true, message: '请选择url', trigger: 'blur' }
         ],
-        description: [
-          { required: true, message: '请输入api介绍', trigger: 'blur' }
+        author: [
+          { required: true, message: '请输入author', trigger: 'blur' }
         ]
       }
     }
@@ -172,10 +176,11 @@ export default {
     initForm() {
       this.$refs.apiForm.resetFields()
       this.form= {
-        sku_id: '',
-        sku_name: '',
-        third_category: '',
-        fee_rate: -1
+        type: '',
+        title: '',
+        url: '',
+        author: '',
+        remark: ''
       }
     },
     closeDialog() {
@@ -184,11 +189,11 @@ export default {
     },
     openDialog(type) {
       switch (type) {
-        case 'addApi':
-          this.dialogTitlethis = '新增Api'
+        case 'add':
+          this.dialogTitlethis = '新增收藏'
           break
         case 'edit':
-          this.dialogTitlethis = '编辑Api'
+          this.dialogTitlethis = '编辑收藏'
           break
         default:
           break
@@ -197,8 +202,8 @@ export default {
       this.dialogFormVisible = true
     },
     async editApi(row) {
-      const res = await getApiById({ id: row.ID })
-      this.form = res.data.api
+      const res = await getCollectionById({ id: row.ID })
+      this.form = res.data.collection
       this.openDialog('edit')
     },
     async deleteApi(row) {
@@ -208,7 +213,7 @@ export default {
         type: 'warning'
       })
         .then(async () => {
-          const res = await deleteApi(row)
+          const res = await deleteCollection(row)
           if (res.code == 0) {
             this.$message({
               type: 'success',
@@ -228,9 +233,9 @@ export default {
       this.$refs.apiForm.validate(async valid => {
         if (valid) {
           switch (this.type) {
-            case 'addApi':
+            case 'add':
               {
-                const res = await createApi(this.form)
+                const res = await createCollection(this.form)
                 if (res.code == 0) {
                   this.$message({
                     type: 'success',
@@ -245,7 +250,7 @@ export default {
               break
             case 'edit':
               {
-                const res = await updateApi(this.form)
+                const res = await updateCollection(this.form)
                 if (res.code == 0) {
                   this.$message({
                     type: 'success',

@@ -36,3 +36,14 @@ func GetZhihuCollectionList(c model.ZhihuCollection, info request.PageInfo, orde
 	}
 	return err, collectionList, total
 }
+
+func GetCollectionById(id float64) (err error, c model.ZhihuCollection) {
+	err = global.GVA_DB.Where("id = ?", id).First(&c).Error
+	return
+}
+
+func UpdateCollection(c model.ZhihuCollection) (err error) {
+	err = global.GVA_DB.Save(&c).Error
+
+	return err
+}

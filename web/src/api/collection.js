@@ -7,3 +7,35 @@ export const getCollectionList = (data) => {
         data
     })
 }
+
+export const getCollectionById = (data) => {
+    return service({
+        url: "/zhihu/getCollectionById",
+        method: 'post',
+        data
+    })
+}
+
+export const updateCollection = (data) => {
+    return service({
+        url: "/zhihu/updateCollection",
+        method: 'post',
+        data
+    })
+}
+
+export const createCollection = (data) => {
+    return service({
+        url: "/zhihu/createCollection",
+        method: 'post',
+        data
+    })
+}
+
+export const deleteCollection = (data) => {
+    return service({
+        url: "/zhihu/deleteCollection",
+        method: 'post',
+        data
+    })
+}
