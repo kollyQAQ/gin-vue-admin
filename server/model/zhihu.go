@@ -16,6 +16,17 @@ func (ZhihuGoods) TableName() string {
 	return "t_zhihu_goods"
 }
 
+type ZhihuGoodsWithContent struct {
+	ID      uint   `gorm:"primary_key"`
+	SkuID   string `json:"sku_id"`
+	SkuName string `json:"sku_name"`
+	Content string `json:"content"`
+}
+
+func (ZhihuGoodsWithContent) TableName() string {
+	return "t_zhihu_goods"
+}
+
 type ZhihuQuestionAnswer struct {
 	ID             uint   `gorm:"primary_key"`
 	Type           int    `json:"type"`

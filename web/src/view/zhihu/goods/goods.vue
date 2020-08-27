@@ -70,28 +70,21 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :title="dialogTitle" :visible.sync="dialogFormVisible">
-      <el-form :inline="true" :model="form" :rules="rules" label-width="80px" ref="apiForm">
-        <el-form-item label="路径" prop="path">
-          <el-input autocomplete="off" v-model="form.path"></el-input>
+      <el-form :inline="true" :model="form" :rules="rules" label-width="80px" ref="goodsForm">
+        <el-form-item label="sku" prop="sku_id">
+          <el-input autocomplete="off" v-model="form.sku_id"></el-input>
         </el-form-item>
-        <el-form-item label="请求" prop="method">
-          <el-select placeholder="请选择" v-model="form.method">
-            <el-option
-              :key="item.value"
-              :label="`${item.label}(${item.value})`"
-              :value="item.value"
-              v-for="item in methodOptions"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="api分组" prop="apiGroup">
-          <el-input autocomplete="off" v-model="form.apiGroup"></el-input>
-        </el-form-item>
-        <el-form-item label="api简介" prop="description">
-          <el-input autocomplete="off" v-model="form.description"></el-input>
+        <el-form-item label="商品名" prop="sku_name">
+          <el-input autocomplete="off" v-model="form.sku_name"></el-input>
         </el-form-item>
       </el-form>
-      <div class="warning">新增Api需要在角色管理内配置权限才可使用</div>
+      <div class="edit_container">
+        <quill-editor
+                :options="{}"
+                ref="myQuillEditor"
+                v-model="form.content"
+        ></quill-editor>
+      </div>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -105,15 +98,12 @@
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
 
 import {
-  getGoodsList
+  getGoodsList,
+  getGoodsById,
+  updateGoods,
+  createGoods,
+  deleteGoods
 } from '@/api/goods'
-
-import {
-  getApiById,
-  createApi,
-  updateApi,
-  deleteApi
-} from '@/api/api'
 
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
@@ -139,23 +129,16 @@ export default {
       dialogFormVisible: false,
       dialogTitle: '新增商品',
       form: {
-        path: '',
-        apiGroup: '',
-        method: '',
-        description: ''
+        sku_id: '',
+        sku_name: '',
+        content: ''
       },
       methodOptions: methodOptions,
       type: '',
       rules: {
-        path: [{ required: true, message: '请输入api路径', trigger: 'blur' }],
-        apiGroup: [
-          { required: true, message: '请输入组名称', trigger: 'blur' }
-        ],
-        method: [
-          { required: true, message: '请选择请求方式', trigger: 'blur' }
-        ],
-        description: [
-          { required: true, message: '请输入api介绍', trigger: 'blur' }
+        sku_id: [{ required: true, message: '请输入sku_id', trigger: 'blur' }],
+        sku_name: [
+          { required: true, message: '请输入商品名称', trigger: 'blur' }
         ]
       }
     }
@@ -176,12 +159,10 @@ export default {
       this.getTableData()
     },
     initForm() {
-      this.$refs.apiForm.resetFields()
+      this.$refs.goodsForm.resetFields()
       this.form= {
         sku_id: '',
-        sku_name: '',
-        third_category: '',
-        fee_rate: -1
+        sku_name: ''
       }
     },
     closeDialog() {
@@ -191,10 +172,10 @@ export default {
     openDialog(type) {
       switch (type) {
         case 'addApi':
-          this.dialogTitlethis = '新增Api'
+          this.dialogTitlethis = '新增商品'
           break
         case 'edit':
-          this.dialogTitlethis = '编辑Api'
+          this.dialogTitlethis = '编辑商品'
           break
         default:
           break
@@ -203,8 +184,8 @@ export default {
       this.dialogFormVisible = true
     },
     async editGoods(row) {
-      const res = await getApiById({ id: row.ID })
-      this.form = res.data.api
+      const res = await getGoodsById({ id: row.ID })
+      this.form = res.data.goods
       this.openDialog('edit')
     },
     async deleteGoods(row) {
@@ -214,7 +195,7 @@ export default {
         type: 'warning'
       })
         .then(async () => {
-          const res = await deleteApi(row)
+          const res = await deleteGoods(row)
           if (res.code == 0) {
             this.$message({
               type: 'success',
@@ -231,12 +212,12 @@ export default {
         })
     },
     async enterDialog() {
-      this.$refs.apiForm.validate(async valid => {
+      this.$refs.goodsForm.validate(async valid => {
         if (valid) {
           switch (this.type) {
             case 'addApi':
               {
-                const res = await createApi(this.form)
+                const res = await createGoods(this.form)
                 if (res.code == 0) {
                   this.$message({
                     type: 'success',
@@ -251,7 +232,7 @@ export default {
               break
             case 'edit':
               {
-                const res = await updateApi(this.form)
+                const res = await updateGoods(this.form)
                 if (res.code == 0) {
                   this.$message({
                     type: 'success',
