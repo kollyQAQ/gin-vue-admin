@@ -18,3 +18,19 @@ export const getGoodsList = (data) => {
         data
     })
 }
+
+export const getQaList = (data) => {
+    return service({
+        url: "/zhihu/getQaList",
+        method: 'post',
+        data
+    })
+}
+
+export const getCollectionList = (data) => {
+    return service({
+        url: "/zhihu/getCollectionList",
+        method: 'post',
+        data
+    })
+}

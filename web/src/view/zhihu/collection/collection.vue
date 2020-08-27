@@ -2,17 +2,8 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="sku">
-          <el-input placeholder="sku" v-model="searchInfo.sku_id"></el-input>
-        </el-form-item>
-        <el-form-item label="商品名">
-          <el-input placeholder="商品名" v-model="searchInfo.sku_name"></el-input>
-        </el-form-item>
-        <el-form-item label="佣金比(小于)">
-          <el-input type='number' placeholder="佣金比" v-model.number="searchInfo.fee_rate"></el-input>
-        </el-form-item>
-        <el-form-item label="品类">
-          <el-select clearable placeholder="请选择" v-model="searchInfo.third_category">
+        <el-form-item label="类型">
+          <el-select clearable placeholder="请选择" v-model="searchInfo.type">
             <el-option
               :key="item.value"
               :label="`${item.label}`"
@@ -30,26 +21,15 @@
       </el-form>
     </div>
     <el-table :data="tableData" @sort-change="sortChange" border stripe>
-      <el-table-column label="id" min-width="50" prop="ID" sortable="custom"></el-table-column>
-      <el-table-column label="sku" min-width="80" sortable="custom">
+      <el-table-column label="类型" min-width="50" prop="type" sortable="custom"></el-table-column>
+      <el-table-column label="内容" min-width="200" sortable="custom">
         <template slot-scope="scope">
-          <a :href="'http://item.jd.com/' + scope.row.sku_id + '.html'" target="_blank" style="color:#606266">
-            {{scope.row.sku_id}}
+          <a :href=scope.row.url target="_blank" style="color:#606266">
+            {{scope.row.title}}
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="商品名" min-width="200" sortable="custom">
-        <template slot-scope="scope">
-          <a :href="'https://union.jd.com/proManager/index?pageNo=1&keywords=' + scope.row.sku_id" target="_blank" style="color:#606266">
-            {{scope.row.sku_name}}
-          </a>
-        </template>
-      </el-table-column>
-      <el-table-column label="价格" min-width="50" prop="price" sortable="custom"></el-table-column>
-      <el-table-column label="佣金比" min-width="50" prop="fee_rate" sortable="custom"></el-table-column>
-      <el-table-column label="佣金" min-width="50" prop="fee" sortable="custom"></el-table-column>
-      <el-table-column label="品类" min-width="50" prop="third_category" sortable="custom"></el-table-column>
-      <el-table-column label="是否自营" min-width="50" prop="jd_sale" sortable="custom"></el-table-column>
+      <el-table-column label="作者" min-width="80" prop="author" sortable="custom"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="editApi(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
@@ -112,27 +92,43 @@ import {
 } from '@/api/zhihu'
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
+import {getCollectionList} from "../../../api/zhihu";
 const methodOptions = [
   {
-    value: '乳胶枕',
-    label: '乳胶枕',
+    value: '用户',
+    label: '用户',
     type: ''
   },
   {
-    value: '按摩',
-    label: '按摩器',
+    value: '专栏',
+    label: '专栏',
+    type: ''
+  },
+  {
+    value: '文章',
+    label: '文章',
+    type: ''
+  },
+  {
+    value: '回答',
+    label: '回答',
+    type: ''
+  },
+  {
+    value: '话术',
+    label: '话术',
     type: ''
   }
 ]
 
 export default {
-  name: 'Goods',
+  name: 'Collection',
   mixins: [infoList],
   data() {
     return {
-      listApi: getGoodsList,
+      listApi: getCollectionList,
       dialogFormVisible: false,
-      dialogTitle: '新增商品',
+      dialogTitle: '新增收藏',
       form: {
         path: '',
         apiGroup: '',

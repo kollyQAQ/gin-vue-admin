@@ -2,17 +2,14 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="sku">
-          <el-input placeholder="sku" v-model="searchInfo.sku_id"></el-input>
+        <el-form-item label="问题ID">
+          <el-input placeholder="问题ID" v-model="searchInfo.qid"></el-input>
         </el-form-item>
-        <el-form-item label="商品名">
-          <el-input placeholder="商品名" v-model="searchInfo.sku_name"></el-input>
-        </el-form-item>
-        <el-form-item label="佣金比(小于)">
-          <el-input type='number' placeholder="佣金比" v-model.number="searchInfo.fee_rate"></el-input>
+        <el-form-item label="问题名称">
+          <el-input placeholder="问题名称" v-model="searchInfo.qname"></el-input>
         </el-form-item>
         <el-form-item label="品类">
-          <el-select clearable placeholder="请选择" v-model="searchInfo.third_category">
+          <el-select clearable placeholder="请选择" v-model="searchInfo.type">
             <el-option
               :key="item.value"
               :label="`${item.label}`"
@@ -30,29 +27,29 @@
       </el-form>
     </div>
     <el-table :data="tableData" @sort-change="sortChange" border stripe>
-      <el-table-column label="id" min-width="50" prop="ID" sortable="custom"></el-table-column>
-      <el-table-column label="sku" min-width="80" sortable="custom">
+      <el-table-column label="问题ID" min-width="80" sortable="custom">
         <template slot-scope="scope">
-          <a :href="'http://item.jd.com/' + scope.row.sku_id + '.html'" target="_blank" style="color:#606266">
-            {{scope.row.sku_id}}
+          <a :href="'https://www.zhihu.com/question/' + scope.row.qid" target="_blank" style="color:#606266">
+            {{scope.row.qid}}
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="商品名" min-width="200" sortable="custom">
+      <el-table-column label="问题名称" min-width="200" prop="qname" sortable="custom"></el-table-column>
+      <el-table-column label="总浏览" min-width="80" prop="view_total" sortable="custom"></el-table-column>
+      <el-table-column label="总回答" min-width="80" prop="answer_total" sortable="custom"></el-table-column>
+      <el-table-column label="今日浏览" min-width="80" prop="today_add_view" sortable="custom"></el-table-column>
+      <el-table-column label="回答ID" min-width="80" sortable="custom">
         <template slot-scope="scope">
-          <a :href="'https://union.jd.com/proManager/index?pageNo=1&keywords=' + scope.row.sku_id" target="_blank" style="color:#606266">
-            {{scope.row.sku_name}}
+          <a :href="'https://www.zhihu.com/question/' + scope.row.qid + '/answer/' + scope.row.aid" target="_blank" style="color:#606266">
+            {{scope.row.qid}}
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="价格" min-width="50" prop="price" sortable="custom"></el-table-column>
-      <el-table-column label="佣金比" min-width="50" prop="fee_rate" sortable="custom"></el-table-column>
-      <el-table-column label="佣金" min-width="50" prop="fee" sortable="custom"></el-table-column>
-      <el-table-column label="品类" min-width="50" prop="third_category" sortable="custom"></el-table-column>
-      <el-table-column label="是否自营" min-width="50" prop="jd_sale" sortable="custom"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="200">
+      <el-table-column label="排名" min-width="60" prop="rank" sortable="custom"></el-table-column>
+      <el-table-column label="点赞" min-width="60" prop="like_num" sortable="custom"></el-table-column>
+      <el-table-column label="带货" min-width="60" prop="with_card" sortable="custom"></el-table-column>
+      <el-table-column fixed="right" label="操作" width="80">
         <template slot-scope="scope">
-          <el-button @click="editApi(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
           <el-button @click="deleteApi(scope.row)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
         </template>
       </el-table-column>
@@ -105,7 +102,7 @@
 
 import {
   getApiById,
-  getGoodsList,
+  getQaList,
   createApi,
   updateApi,
   deleteApi
@@ -114,25 +111,25 @@ import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
 const methodOptions = [
   {
-    value: '乳胶枕',
-    label: '乳胶枕',
+    value: 1,
+    label: '礼物',
     type: ''
   },
   {
-    value: '按摩',
-    label: '按摩器',
+    value: 2,
+    label: '乳胶枕',
     type: ''
   }
 ]
 
 export default {
-  name: 'Goods',
+  name: 'Qa',
   mixins: [infoList],
   data() {
     return {
-      listApi: getGoodsList,
+      listApi: getQaList,
       dialogFormVisible: false,
-      dialogTitle: '新增商品',
+      dialogTitle: '新增问题',
       form: {
         path: '',
         apiGroup: '',
@@ -173,10 +170,9 @@ export default {
     initForm() {
       this.$refs.apiForm.resetFields()
       this.form= {
-        sku_id: '',
-        sku_name: '',
-        third_category: '',
-        fee_rate: -1
+        qid: '',
+        qname:'',
+        type:0
       }
     },
     closeDialog() {
