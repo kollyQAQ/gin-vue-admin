@@ -10,8 +10,8 @@ import (
 func InitZhihuRouter(Router *gin.RouterGroup) {
 	ApiRouter := Router.Group("zhihu").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
-		ApiRouter.POST("getGoodsList", v1.GetGoodsList)       // 获取商品列表
-		ApiRouter.POST("getQaList", v1.GetQuestionAnswer)     // 获取商品列表
-		ApiRouter.POST("getCollectionList", v1.GetCollection) // 获取收藏列表
+		ApiRouter.GET("getGoodsList", v1.GetGoodsList)       // 获取商品列表
+		ApiRouter.GET("getQaList", v1.GetQuestionAnswer)     // 获取商品列表
+		ApiRouter.GET("getCollectionList", v1.GetCollection) // 获取收藏列表
 	}
 }

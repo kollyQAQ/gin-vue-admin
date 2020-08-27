@@ -102,11 +102,15 @@
 
 import {
   getApiById,
-  getQaList,
   createApi,
   updateApi,
   deleteApi
-} from '@/api/zhihu'
+} from '@/api/api'
+
+import {
+  getQaList
+} from '@/api/qa'
+
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
 const methodOptions = [

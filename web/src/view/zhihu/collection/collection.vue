@@ -85,14 +85,17 @@
 
 import {
   getApiById,
-  getGoodsList,
   createApi,
   updateApi,
   deleteApi
-} from '@/api/zhihu'
+} from '@/api/api'
+
+import {
+  getCollectionList
+} from "../../../api/collection";
+
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
-import {getCollectionList} from "../../../api/zhihu";
 const methodOptions = [
   {
     value: '用户',

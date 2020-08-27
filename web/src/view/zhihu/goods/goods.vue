@@ -50,10 +50,11 @@
       <el-table-column label="佣金" min-width="50" prop="fee" sortable="custom"></el-table-column>
       <el-table-column label="品类" min-width="50" prop="third_category" sortable="custom"></el-table-column>
       <el-table-column label="是否自营" min-width="50" prop="jd_sale" sortable="custom"></el-table-column>
+
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button @click="editApi(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
-          <el-button @click="deleteApi(scope.row)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
+          <el-button @click="editGoods(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
+          <el-button @click="deleteGoods(scope.row)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -104,12 +105,16 @@
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
 
 import {
+  getGoodsList
+} from '@/api/goods'
+
+import {
   getApiById,
-  getGoodsList,
   createApi,
   updateApi,
   deleteApi
-} from '@/api/zhihu'
+} from '@/api/api'
+
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
 const methodOptions = [
@@ -197,12 +202,12 @@ export default {
       this.type = type
       this.dialogFormVisible = true
     },
-    async editApi(row) {
+    async editGoods(row) {
       const res = await getApiById({ id: row.ID })
       this.form = res.data.api
       this.openDialog('edit')
     },
-    async deleteApi(row) {
+    async deleteGoods(row) {
       this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
