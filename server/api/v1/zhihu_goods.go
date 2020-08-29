@@ -34,28 +34,6 @@ func GetGoodsList(c *gin.Context) {
 	}
 }
 
-func CreateGoods(c *gin.Context) {
-	var api model.SysApi
-	_ = c.ShouldBindJSON(&api)
-	ApiVerify := utils.Rules{
-		"Path":        {utils.NotEmpty()},
-		"Description": {utils.NotEmpty()},
-		"ApiGroup":    {utils.NotEmpty()},
-		"Method":      {utils.NotEmpty()},
-	}
-	ApiVerifyErr := utils.Verify(api, ApiVerify)
-	if ApiVerifyErr != nil {
-		response.FailWithMessage(ApiVerifyErr.Error(), c)
-		return
-	}
-	err := service.CreateApi(api)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
-	} else {
-		response.OkWithMessage("创建成功", c)
-	}
-}
-
 func GetGoodsById(c *gin.Context) {
 	var idInfo request.GetById
 	_ = c.ShouldBindJSON(&idInfo)
@@ -88,5 +66,43 @@ func UpdateGoods(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("修改数据失败，%v", err), c)
 	} else {
 		response.OkWithMessage("修改数据成功", c)
+	}
+}
+
+func CreateGoods(c *gin.Context) {
+	var goods model.ZhihuGoods
+	_ = c.ShouldBindJSON(&goods)
+	ApiVerify := utils.Rules{
+		"SkuID": {utils.NotEmpty()},
+	}
+	ApiVerifyErr := utils.Verify(goods, ApiVerify)
+	if ApiVerifyErr != nil {
+		response.FailWithMessage(ApiVerifyErr.Error(), c)
+		return
+	}
+	err := service.CreateGoods(goods)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+}
+
+func DeleteGoods(c *gin.Context) {
+	var a model.ZhihuGoods
+	_ = c.ShouldBindJSON(&a)
+	//ApiVerify := utils.Rules{
+	//	"ID": {utils.NotEmpty()},
+	//}
+	//ApiVerifyErr := utils.Verify(a.Model, ApiVerify)
+	//if ApiVerifyErr != nil {
+	//	response.FailWithMessage(ApiVerifyErr.Error(), c)
+	//	return
+	//}
+	err := service.DeleteGoods(a)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	} else {
+		response.OkWithMessage("删除成功", c)
 	}
 }

@@ -7,3 +7,35 @@ export const getQaList = (data) => {
         data
     })
 }
+
+export const getQaById = (data) => {
+    return service({
+        url: "/zhihu/getQaById",
+        method: 'post',
+        data
+    })
+}
+
+export const createQa = (data) => {
+    return service({
+        url: "/zhihu/createQa",
+        method: 'post',
+        data
+    })
+}
+
+export const updateQa = (data) => {
+    return service({
+        url: "/zhihu/updateQa",
+        method: 'post',
+        data
+    })
+}
+
+export const deleteQa = (data) => {
+    return service({
+        url: "/zhihu/deleteQa",
+        method: 'post',
+        data
+    })
+}

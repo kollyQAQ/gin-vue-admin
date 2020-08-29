@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"time"
 )
 
 func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int) {
@@ -61,7 +62,7 @@ func UpdateGoods(goods model.ZhihuGoodsWithContent) (err error) {
 	err = global.GVA_DB.Where("id = ?", goods.ID).First(&oldGoods).Error
 
 	if oldGoods.SkuID != goods.SkuID {
-		flag := global.GVA_DB.Where("sku_id = ?", goods.SkuID).Find(&model.SysApi{}).RecordNotFound()
+		flag := global.GVA_DB.Where("sku_id = ?", goods.SkuID).Find(&model.ZhihuGoodsWithContent{}).RecordNotFound()
 		if !flag {
 			return errors.New("存在相同sku_id")
 		}
@@ -69,5 +70,21 @@ func UpdateGoods(goods model.ZhihuGoodsWithContent) (err error) {
 
 	err = global.GVA_DB.Save(&goods).Error
 
+	return err
+}
+
+func CreateGoods(goods model.ZhihuGoods) (err error) {
+	findOne := global.GVA_DB.Where("sku_id = ?", goods.SkuID).Find(&model.ZhihuGoods{}).Error
+	if findOne == nil {
+		return errors.New("存在相同sku_id")
+	} else {
+		goods.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
+		err = global.GVA_DB.Create(&goods).Error
+	}
+	return err
+}
+
+func DeleteGoods(goods model.ZhihuGoods) (err error) {
+	err = global.GVA_DB.Delete(goods).Error
 	return err
 }

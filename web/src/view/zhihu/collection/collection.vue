@@ -40,7 +40,7 @@
     <el-pagination
       :current-page="page"
       :page-size="pageSize"
-      :page-sizes="[30, 50, 100]"
+      :page-sizes="[20, 50, 100]"
       :style="{float:'right',padding:'20px'}"
       :total="total"
       @current-change="handleCurrentChange"
@@ -95,7 +95,7 @@ import {
   createCollection,
   updateCollection,
   deleteCollection,
-} from "../../../api/collection";
+} from "@/api/collection";
 
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
@@ -121,7 +121,7 @@ const methodOptions = [
     type: ''
   },
   {
-    value: '话术',
+    value: 'E话术',
     label: '话术',
     type: ''
   }
@@ -150,10 +150,10 @@ export default {
           { required: true, message: '请输入title', trigger: 'blur' }
         ],
         url: [
-          { required: true, message: '请选择url', trigger: 'blur' }
+          { required: false, message: '请选择url', trigger: 'blur' }
         ],
         author: [
-          { required: true, message: '请输入author', trigger: 'blur' }
+          { required: false, message: '请输入author', trigger: 'blur' }
         ]
       }
     }
@@ -190,10 +190,10 @@ export default {
     openDialog(type) {
       switch (type) {
         case 'add':
-          this.dialogTitlethis = '新增收藏'
+          this.dialogTitle = '新增收藏'
           break
         case 'edit':
-          this.dialogTitlethis = '编辑收藏'
+          this.dialogTitle = '编辑收藏'
           break
         default:
           break
@@ -207,7 +207,7 @@ export default {
       this.openDialog('edit')
     },
     async deleteApi(row) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+      this.$confirm('此操作将删除此收藏, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

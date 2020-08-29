@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -43,4 +44,53 @@ func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo,
 		}
 	}
 	return err, qaList, total
+}
+
+func GetQaById(id string) (err error, qa model.ZhihuQuestionAnswer) {
+	err = global.GVA_DB.Where("qid = ?", id).First(&qa).Error
+	return
+}
+
+func UpdateQuestion(question model.ZhihuQuestion) (err error) {
+	var old model.ZhihuQuestion
+
+	err = global.GVA_DB.Where("qid = ?", question.Qid).First(&old).Error
+
+	if old.Qid != question.Qid {
+		flag := global.GVA_DB.Where("qid = ?", question.Qid).Find(&model.ZhihuQuestion{}).RecordNotFound()
+		if !flag {
+			return errors.New("存在相同qid")
+		}
+	}
+
+	err = global.GVA_DB.Save(&question).Error
+
+	return err
+}
+
+func UpdateAnswer(qid, aid, with_card string) (err error) {
+	find := model.ZhihuAnswer{Qid: qid}
+	update := model.ZhihuAnswer{Aid: aid, WithCard: with_card}
+	insert := model.ZhihuAnswer{Qid: qid, Aid: aid, WithCard: with_card}
+
+	//	Where("qid = ?", answer.Qid).Update("aid", answer.Aid)
+	//global.GVA_DB.Model(&model.ZhihuAnswer{}).
+
+	return global.GVA_DB.Where(find).Assign(update).FirstOrCreate(&insert).Error
+
+}
+
+func CreateQuestion(question model.ZhihuQuestion) (err error) {
+	findOne := global.GVA_DB.Where("qid = ?", question.Qid).Find(&model.ZhihuQuestion{}).Error
+	if findOne == nil {
+		return errors.New("存在相同qid")
+	} else {
+		err = global.GVA_DB.Create(&question).Error
+	}
+	return err
+}
+
+func DeleteQuestion(question model.ZhihuQuestion) (err error) {
+	err = global.GVA_DB.Delete(question).Error
+	return err
 }

@@ -25,7 +25,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog('addApi')" type="primary">新增商品</el-button>
+          <el-button @click="openDialog('add')" type="primary">新增商品</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -61,7 +61,7 @@
     <el-pagination
       :current-page="page"
       :page-size="pageSize"
-      :page-sizes="[30, 50, 100]"
+      :page-sizes="[20, 50, 100]"
       :style="{float:'right',padding:'20px'}"
       :total="total"
       @current-change="handleCurrentChange"
@@ -114,8 +114,13 @@ const methodOptions = [
     type: ''
   },
   {
-    value: '按摩',
+    value: '按摩器',
     label: '按摩器',
+    type: ''
+  },
+  {
+    value: '按摩椅',
+    label: '按摩椅',
     type: ''
   }
 ]
@@ -138,7 +143,7 @@ export default {
       rules: {
         sku_id: [{ required: true, message: '请输入sku_id', trigger: 'blur' }],
         sku_name: [
-          { required: true, message: '请输入商品名称', trigger: 'blur' }
+          { required: false, message: '请输入商品名称', trigger: 'blur' }
         ]
       }
     }
@@ -171,11 +176,11 @@ export default {
     },
     openDialog(type) {
       switch (type) {
-        case 'addApi':
-          this.dialogTitlethis = '新增商品'
+        case 'add':
+          this.dialogTitle = '新增商品'
           break
         case 'edit':
-          this.dialogTitlethis = '编辑商品'
+          this.dialogTitle = '编辑商品'
           break
         default:
           break
@@ -189,7 +194,7 @@ export default {
       this.openDialog('edit')
     },
     async deleteGoods(row) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+      this.$confirm('此操作将删除此商品, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -215,7 +220,7 @@ export default {
       this.$refs.goodsForm.validate(async valid => {
         if (valid) {
           switch (this.type) {
-            case 'addApi':
+            case 'add':
               {
                 const res = await createGoods(this.form)
                 if (res.code == 0) {

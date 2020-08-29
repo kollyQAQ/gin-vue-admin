@@ -70,23 +70,32 @@ func UpdateCollection(c *gin.Context) {
 }
 
 func CreateCollection(c *gin.Context) {
-	var api model.SysApi
-	_ = c.ShouldBindJSON(&api)
-	ApiVerify := utils.Rules{
-		"Path":        {utils.NotEmpty()},
-		"Description": {utils.NotEmpty()},
-		"ApiGroup":    {utils.NotEmpty()},
-		"Method":      {utils.NotEmpty()},
-	}
-	ApiVerifyErr := utils.Verify(api, ApiVerify)
-	if ApiVerifyErr != nil {
-		response.FailWithMessage(ApiVerifyErr.Error(), c)
-		return
-	}
-	err := service.CreateApi(api)
+	var collection model.ZhihuCollection
+	_ = c.ShouldBindJSON(&collection)
+
+	err := service.CreateCollection(collection)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 	} else {
 		response.OkWithMessage("创建成功", c)
+	}
+}
+
+func DeleteCollection(c *gin.Context) {
+	var a model.ZhihuCollection
+	_ = c.ShouldBindJSON(&a)
+	//ApiVerify := utils.Rules{
+	//	"ID": {utils.NotEmpty()},
+	//}
+	//ApiVerifyErr := utils.Verify(a.Model, ApiVerify)
+	//if ApiVerifyErr != nil {
+	//	response.FailWithMessage(ApiVerifyErr.Error(), c)
+	//	return
+	//}
+	err := service.DeleteCollection(a)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	} else {
+		response.OkWithMessage("删除成功", c)
 	}
 }

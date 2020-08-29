@@ -47,3 +47,13 @@ func UpdateCollection(c model.ZhihuCollection) (err error) {
 
 	return err
 }
+
+func CreateCollection(c model.ZhihuCollection) (err error) {
+	err = global.GVA_DB.Create(&c).Error
+	return err
+}
+
+func DeleteCollection(c model.ZhihuCollection) (err error) {
+	err = global.GVA_DB.Delete(c).Error
+	return err
+}
