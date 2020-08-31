@@ -39,3 +39,11 @@ export const deleteQa = (data) => {
         data
     })
 }
+
+export const queryQaHistory = (data) => {
+    return service({
+        url: "/zhihu/queryQaHistory",
+        method: 'post',
+        data
+    })
+}
