@@ -105,8 +105,6 @@ import {
   deleteGoods
 } from '@/api/goods'
 
-import imageResize from 'quill-image-resize-module'
-Quill.register('modules/imageResize', imageResize)
 
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'

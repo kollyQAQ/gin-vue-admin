@@ -20,6 +20,7 @@ export default {
   height: 100vh;
   overflow: hidden;
 }
+
 /*滚动条整体样式*/
 ::-webkit-scrollbar{
   width: 8px;/*竖向滚动条的宽度*/
@@ -35,12 +36,12 @@ export default {
 }
 
 .el-dialog {
-  max-height: calc(100vh - 30vh);
+  max-height: calc(100vh - 20vh);
   overflow: hidden;
 }
 
 .el-dialog__body {
-  height: calc(100vh - 30vh - 192px);
+  height: calc(100vh - 20vh - 200px);
   overflow-y: scroll;
 }
 </style>

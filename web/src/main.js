@@ -25,6 +25,10 @@ import 'quill/dist/quill.bubble.css'
 
 Vue.use(VueQuillEditor)
 
+import Quill from 'quill'
+import imageResize from 'quill-image-resize-module'
+Quill.register('modules/imageResize', imageResize)
+
 // markdown插件
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
@@ -63,3 +67,4 @@ new Vue({
 //引入echarts
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
+
