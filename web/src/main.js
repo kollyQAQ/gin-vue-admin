@@ -25,9 +25,9 @@ import 'quill/dist/quill.bubble.css'
 
 Vue.use(VueQuillEditor)
 
-import Quill from 'quill'
-import imageResize from 'quill-image-resize-module'
-Quill.register('modules/imageResize', imageResize)
+// import Quill from 'quill'
+// import imageResize from 'quill-image-resize-module'
+// Quill.register('modules/imageResize', imageResize)
 
 // markdown插件
 import mavonEditor from 'mavon-editor'
