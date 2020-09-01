@@ -30,6 +30,7 @@
         </template>
       </el-table-column>
       <el-table-column label="作者" min-width="80" prop="author" sortable="custom"></el-table-column>
+      <el-table-column label="优先级" min-width="80" prop="priority" sortable="custom"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="editApi(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
@@ -68,6 +69,9 @@
         </el-form-item>
         <el-form-item label="作者" prop="description">
           <el-input autocomplete="off" v-model="form.author"></el-input>
+        </el-form-item>
+        <el-form-item label="优先级" prop="priority">
+          <el-input autocomplete="off" v-model="form.priority"></el-input>
         </el-form-item>
       </el-form>
       <div class="edit_container">
@@ -140,6 +144,7 @@ export default {
         title: '',
         url: '',
         author: '',
+        priority: 0,
         remark: ''
       },
       methodOptions: methodOptions,
@@ -180,6 +185,7 @@ export default {
         title: '',
         url: '',
         author: '',
+        priority: 0,
         remark: ''
       }
     },

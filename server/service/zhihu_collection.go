@@ -31,7 +31,7 @@ func GetZhihuCollectionList(c model.ZhihuCollection, info request.PageInfo, orde
 			}
 			err = db.Order(OrderStr, true).Find(&collectionList).Error
 		} else {
-			err = db.Order("type", true).Find(&collectionList).Error
+			err = db.Order("priority desc, type", true).Find(&collectionList).Error
 		}
 	}
 	return err, collectionList, total
