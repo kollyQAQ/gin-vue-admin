@@ -97,9 +97,9 @@
       </div>
     </el-dialog>
 
-    <el-dialog :before-close="closeHisDialog" :title="dialogTitle" :visible.sync="dialogHisVisible">
-      <div>
-        <div id="main" class="chart-container"></div>
+    <el-dialog :before-close="closeHisDialog" :title="dialogHisTitle" :visible.sync="dialogHisVisible">
+      <div class="history">
+        <div id="his" class="chart-container"></div>
       </div>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeHisDialog">取 消</el-button>
@@ -124,6 +124,7 @@ import {
 
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
+
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
 
@@ -165,8 +166,9 @@ export default {
     return {
       listApi: getQaList,
       dialogFormVisible: false,
-      dialogHisVisible: false,
+      dialogHisVisible: true,
       dialogTitle: '新增问答',
+      dialogHisTitle: '历史趋势',
       form: {
         qid: '',
         aid: '',
@@ -237,89 +239,7 @@ export default {
       this.type = type
     },
     async viewHistory(row) {
-
-
       this.dialogHisVisible = true
-
-
-      let myChart = echarts.init(document.getElementById('main'));
-
-      let  option = {
-        legend: {},
-        tooltip: {
-          trigger: 'axis',
-          showContent: false
-        },
-        dataset: {
-          source: [
-            ['product', '2012', '2013', '2014', '2015', '2016', '2017','2018','2019','2020'],
-            ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 70.0,6.4, 65.2, 82.5],
-            ['Milk Tea', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1,2, 67.1, 69.2],
-            ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5,65.1, 53.3, 83.8],
-            ['Walnut Brownie', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1,86.5, 92.1, 85.7]
-          ]
-        },
-        xAxis: {
-          type: 'category',
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: 'rgb(192,192,192)',  //更改坐标轴文字颜色
-              fontSize : 14    //更改坐标轴文字大小
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLine:{
-            lineStyle:{
-              color:'rgb(192,192,192)' //更改坐标轴颜色
-            }
-          },
-        },
-        yAxis: {
-          gridIndex:0,
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: 'rgb(192,192,192)',  //更改坐标轴文字颜色
-              fontSize: 14    //更改坐标轴文字大小
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            lineStyle: {
-              color: 'rgb(192,192,192)' //更改坐标轴颜色
-            }
-          }
-        },
-        grid: {top: '55%'},
-        series: [
-          {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-          {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-          {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-          {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-          {
-            type: 'pie',
-            id: 'pie',
-            radius: '30%',
-            center: ['50%', '25%'],
-            label: {
-              formatter: '{b}: {@2012} ({d}%)'
-            },
-            encode: {
-              itemName: 'product',
-              value: '2012',
-              tooltip: '2012'
-            }
-          }
-        ]
-      };
-
-      // window.addEventListener('resize',function() {myChart.resize()});
-      myChart.setOption(option);
 
       const res = await queryQaHistory({ id: row.qid })
       this.form = res.data.qa
@@ -426,6 +346,90 @@ export default {
   },
   created(){
     this.getTableData()
+  },
+  mounted(){
+    console.log(1111)
+    console.log(document)
+    console.log(document.getElementById('his'))
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById('his'),'macarons');
+    console.log(myChart)
+    // 指定图表的配置项和数据
+    let option = {
+      legend: {},
+      tooltip: {
+        trigger: 'axis',
+        showContent: false
+      },
+      dataset: {
+        source: [
+          ['product', '2012', '2013', '2014', '2015', '2016', '2017','2018','2019','2020'],
+          ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 70.0,6.4, 65.2, 82.5],
+          ['Milk Tea', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1,2, 67.1, 69.2],
+          ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5,65.1, 53.3, 83.8],
+          ['Walnut Brownie', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1,86.5, 92.1, 85.7]
+        ]
+      },
+      xAxis: {
+        type: 'category',
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: 'rgb(192,192,192)',  //更改坐标轴文字颜色
+            fontSize : 14    //更改坐标轴文字大小
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLine:{
+          lineStyle:{
+            color:'rgb(192,192,192)' //更改坐标轴颜色
+          }
+        },
+      },
+      yAxis: {
+        gridIndex:0,
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: 'rgb(192,192,192)',  //更改坐标轴文字颜色
+            fontSize: 14    //更改坐标轴文字大小
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: {
+            color: 'rgb(192,192,192)' //更改坐标轴颜色
+          }
+        }
+      },
+      grid: {top: '55%'},
+      series: [
+        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+        {
+          type: 'pie',
+          id: 'pie',
+          radius: '30%',
+          center: ['50%', '25%'],
+          label: {
+            formatter: '{b}: {@2012} ({d}%)'
+          },
+          encode: {
+            itemName: 'product',
+            value: '2012',
+            tooltip: '2012'
+          }
+        }
+      ]
+    };
+    myChart.setOption(option);
+    console.log(myChart)
   }
 }
 </script>
@@ -442,4 +446,18 @@ export default {
 .warning {
   color: #dc143c;
 }
+.history{
+  width: 100%;
+  height: 360px;
+  margin-top: 20px;
+  overflow: hidden;
+  .chart-container{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    background-color: #fff;
+  }
+}
+
 </style>
