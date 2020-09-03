@@ -106,3 +106,30 @@ func DeleteQa(c *gin.Context) {
 		response.OkWithMessage("删除成功", c)
 	}
 }
+
+func QueryHistory(c *gin.Context) {
+	var idInfo request.GetByIdStr
+	_ = c.ShouldBindJSON(&idInfo)
+
+	var res [][]interface{}
+	dateList := []interface{}{"date"}
+	viewList := []interface{}{"view"}
+	//res = append(res, []interface{}{"date", "09-01", "09-02", "09-03", "09-04", "09-05", "09-06", "09-07"})
+	//res = append(res, []interface{}{"view", 100, 1100, 1200, 2500, 2000, 400, 200})
+	//response.OkWithData(res, c)
+
+	err, list := service.QueryQuestionHistory(idInfo.Id)
+	for _, history := range list {
+		dateList = append(dateList, history.Date)
+		viewList = append(viewList, history.AddView)
+	}
+
+	res = append(res, dateList)
+	res = append(res, viewList)
+
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	} else {
+		response.OkWithData(res, c)
+	}
+}

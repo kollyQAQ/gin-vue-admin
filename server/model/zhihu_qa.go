@@ -47,3 +47,14 @@ type ZhihuAnswer struct {
 func (ZhihuAnswer) TableName() string {
 	return "t_zhihu_answer"
 }
+
+type ZhihuQuestionHistory struct {
+	Date    string `json:"date"`
+	Qid     string `json:"qid"`
+	Qname   string `json:"qname"`
+	AddView int    `json:"add_view"`
+}
+
+func (ZhihuQuestionHistory) TableName() string {
+	return "view_question_history"
+}

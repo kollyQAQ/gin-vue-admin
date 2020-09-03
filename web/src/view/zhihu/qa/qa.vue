@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column label="问题名称" min-width="180" prop="qname" sortable="custom"></el-table-column>
       <el-table-column label="总浏览" min-width="80" prop="view_total" sortable="custom"></el-table-column>
-      <el-table-column label="总回答" min-width="60" prop="answer_total" sortable="custom"></el-table-column>
+      <el-table-column label="回答数" min-width="80" prop="answer_total" sortable="custom"></el-table-column>
       <el-table-column label="今日浏览" min-width="80" prop="today_add_view" sortable="custom"></el-table-column>
       <el-table-column label="三日浏览" min-width="80" prop="three_day_add_view" sortable="custom"></el-table-column>
       <el-table-column label="回答ID" min-width="80" sortable="custom">
@@ -50,7 +50,7 @@
       <el-table-column label="排名" min-width="60" prop="rank" sortable="custom"></el-table-column>
       <el-table-column label="点赞" min-width="60" prop="like_num" sortable="custom"></el-table-column>
       <el-table-column label="带货" min-width="60" prop="with_card" sortable="custom"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="200">
+      <el-table-column fixed="right" label="操作" width="250">
         <template slot-scope="scope">
           <el-button @click="editQa(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
           <el-button @click="viewHistory(scope.row)" size="small" type="primary" icon="el-icon-edit">历史</el-button>
@@ -107,9 +107,10 @@
       </div>
     </el-dialog>
 
-    <el-dialog :before-close="closeHisDialog" :title="dialogHisTitle" :visible.sync="dialogHisVisible">
+    <el-dialog :before-close="closeHisDialog" :title="dialogHisTitle" :visible.sync="dialogHisVisible"
+               @opened="renderChart">
       <div class="history">
-        <div id="his" class="chart-container"></div>
+        <div id="mychart" class="chart-container"></div>
       </div>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeHisDialog">取 消</el-button>
@@ -181,7 +182,7 @@ export default {
     return {
       listApi: getQaList,
       dialogFormVisible: false,
-      dialogHisVisible: true,
+      dialogHisVisible: false,
       dialogTitle: '新增问答',
       dialogHisTitle: '历史趋势',
       form: {
@@ -190,6 +191,7 @@ export default {
         type: 0,
         with_card: '0'
       },
+      historyData: {},
       methodOptions: methodOptions,
       typesOptions: typesOptions,
       type: '',
@@ -236,7 +238,6 @@ export default {
       this.dialogHisVisible = false
     },
     openDialog(type) {
-      console.log(type)
       switch (type) {
         case 'add':
           this.dialogTitle = '新增问答'
@@ -247,7 +248,6 @@ export default {
           this.dialogFormVisible = true
           break
         case 'history':
-          this.dialogTitle = '历史趋势'
           this.dialogHisVisible = true
           break
         default:
@@ -257,9 +257,14 @@ export default {
     },
     async viewHistory(row) {
       this.dialogHisVisible = true
-
       const res = await queryQaHistory({ id: row.qid })
-      this.form = res.data.qa
+      console.log(res.data)
+      this.historyData = res.data
+      // this.historyData = [
+      //   ['date', '09-01', '09-02', '09-03', '09-04', '09-05', '09-06', '09-07'],
+      //   ['view', 1000, 1100, 1200, 2500, 2000, 1400, 2000],
+      //   ['rank', 1, 2, 3, 4, 5, 6, 7]
+      // ]
       this.openDialog('history')
     },
     async editQa(row) {
@@ -348,7 +353,38 @@ export default {
           }
         }
       })
-    }
+    },
+    renderChart(){
+      let myChart = echarts.init(document.getElementById('mychart'),'macarons');
+      // 指定图表的配置项和数据
+      let option = {
+        legend: {},
+        tooltip: {
+          trigger: 'axis',
+          showContent: true
+        },
+        dataset: {
+          source: this.historyData
+        },
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            show: true,
+          },
+        },
+        yAxis: {
+          gridIndex:0,
+          axisLabel: {
+            show: true,
+          }
+        },
+        series: [
+          {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+          {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+        ]
+      };
+      myChart.setOption(option);
+    },
   },
   filters: {
     methodFiletr(value) {
@@ -364,90 +400,7 @@ export default {
   created(){
     this.getTableData()
   },
-  mounted(){
-    console.log(1111)
-    console.log(document)
-    console.log(document.getElementById('his'))
-    // 基于准备好的dom，初始化echarts实例
-    let myChart = echarts.init(document.getElementById('his'),'macarons');
-    console.log(myChart)
-    // 指定图表的配置项和数据
-    let option = {
-      legend: {},
-      tooltip: {
-        trigger: 'axis',
-        showContent: false
-      },
-      dataset: {
-        source: [
-          ['product', '2012', '2013', '2014', '2015', '2016', '2017','2018','2019','2020'],
-          ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 70.0,6.4, 65.2, 82.5],
-          ['Milk Tea', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1,2, 67.1, 69.2],
-          ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5,65.1, 53.3, 83.8],
-          ['Walnut Brownie', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1,86.5, 92.1, 85.7]
-        ]
-      },
-      xAxis: {
-        type: 'category',
-        axisLabel: {
-          show: true,
-          textStyle: {
-            color: 'rgb(192,192,192)',  //更改坐标轴文字颜色
-            fontSize : 14    //更改坐标轴文字大小
-          }
-        },
-        axisTick: {
-          show: false
-        },
-        axisLine:{
-          lineStyle:{
-            color:'rgb(192,192,192)' //更改坐标轴颜色
-          }
-        },
-      },
-      yAxis: {
-        gridIndex:0,
-        axisLabel: {
-          show: true,
-          textStyle: {
-            color: 'rgb(192,192,192)',  //更改坐标轴文字颜色
-            fontSize: 14    //更改坐标轴文字大小
-          }
-        },
-        axisTick: {
-          show: false
-        },
-        axisLine: {
-          lineStyle: {
-            color: 'rgb(192,192,192)' //更改坐标轴颜色
-          }
-        }
-      },
-      grid: {top: '55%'},
-      series: [
-        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-        {
-          type: 'pie',
-          id: 'pie',
-          radius: '30%',
-          center: ['50%', '25%'],
-          label: {
-            formatter: '{b}: {@2012} ({d}%)'
-          },
-          encode: {
-            itemName: 'product',
-            value: '2012',
-            tooltip: '2012'
-          }
-        }
-      ]
-    };
-    myChart.setOption(option);
-    console.log(myChart)
-  }
+  mounted(){}
 }
 </script>
 <style scoped lang="scss">
@@ -463,16 +416,17 @@ export default {
 .warning {
   color: #dc143c;
 }
+.el-dialog__body{
+  padding-top: 0px;
+}
 .history{
   width: 100%;
   height: 360px;
-  margin-top: 20px;
   overflow: hidden;
   .chart-container{
     position: relative;
     width: 100%;
     height: 100%;
-    padding: 20px;
     background-color: #fff;
   }
 }

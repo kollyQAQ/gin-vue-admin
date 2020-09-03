@@ -94,3 +94,12 @@ func DeleteQuestion(question model.ZhihuQuestion) (err error) {
 	err = global.GVA_DB.Delete(question).Error
 	return err
 }
+
+func QueryQuestionHistory(qid string) (err error, list []model.ZhihuQuestionHistory) {
+	db := global.GVA_DB.Model(&model.ZhihuQuestionHistory{})
+	var qaList []model.ZhihuQuestionHistory
+
+	err = db.Where("qid = ?", qid).Find(&qaList).Error
+
+	return err, qaList
+}
