@@ -77,6 +77,16 @@
         <el-form-item label="问题名称" prop="qname">
           <el-input autocomplete="off" v-model="form.qname"></el-input>
         </el-form-item>
+        <el-form-item label="问题分类" prop="with_card">
+          <el-select placeholder="请选择" v-model="form.type">
+            <el-option
+                    :key="item.value"
+                    :label="`${item.label}`"
+                    :value="item.value"
+                    v-for="item in typesOptions"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="回答ID" prop="aid">
           <el-input autocomplete="off" v-model="form.aid"></el-input>
         </el-form-item>
@@ -143,6 +153,11 @@ const typesOptions = [
     value: 3,
     label: '按摩仪',
     type: ''
+  },
+  {
+    value: 4,
+    label: '教师节礼物',
+    type: ''
   }
 ]
 
@@ -172,6 +187,7 @@ export default {
       form: {
         qid: '',
         aid: '',
+        type: 0,
         with_card: '0'
       },
       methodOptions: methodOptions,
@@ -207,8 +223,9 @@ export default {
       this.$refs.apiForm.resetFields()
       this.form= {
         qid: '',
-        qname:'',
-        type:0
+        qname: '',
+        type: 0,
+        with_card: '0'
       }
     },
     closeDialog() {
