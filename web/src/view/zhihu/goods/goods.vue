@@ -46,7 +46,13 @@
         </template>
       </el-table-column>
       <el-table-column label="价格" min-width="50" prop="price" sortable="custom"></el-table-column>
-      <el-table-column label="佣金比" min-width="50" prop="fee_rate" sortable="custom"></el-table-column>
+      <el-table-column label="佣金比" min-width="50" sortable="custom">
+        <template slot-scope="scope">
+          <p v-if="scope.row.fee_rate>=20" style="font-size:16px;color:red">{{scope.row.fee_rate}}</p>
+          <p v-else-if="scope.row.fee_rate>=10" style="font-size:16px;color:orange">{{scope.row.fee_rate}}</p>
+          <p v-else>{{scope.row.fee_rate}}</p>
+        </template>
+      </el-table-column>
       <el-table-column label="佣金" min-width="50" prop="fee" sortable="custom"></el-table-column>
       <el-table-column label="品类" min-width="50" prop="third_category" sortable="custom"></el-table-column>
       <el-table-column label="是否自营" min-width="50" prop="jd_sale" sortable="custom"></el-table-column>

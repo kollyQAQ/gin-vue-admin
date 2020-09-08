@@ -37,7 +37,12 @@
       </el-table-column>
       <el-table-column label="问题名称" min-width="180" prop="qname" sortable="custom"></el-table-column>
       <el-table-column label="总浏览" min-width="80" prop="view_total" sortable="custom"></el-table-column>
-      <el-table-column label="回答数" min-width="80" prop="answer_total" sortable="custom"></el-table-column>
+      <el-table-column label="回答数" min-width="80" sortable="custom">
+        <template slot-scope="scope">
+          <p v-if="scope.row.answer_total>400" style="font-size:16px;color:green">{{scope.row.answer_total}}</p>
+          <p v-else>{{scope.row.answer_total}}</p>
+        </template>
+      </el-table-column>
       <el-table-column label="今日浏览" min-width="80" prop="today_add_view" sortable="custom"></el-table-column>
       <el-table-column label="三日浏览" min-width="80" prop="three_day_add_view" sortable="custom"></el-table-column>
       <el-table-column label="回答ID" min-width="80" sortable="custom">
@@ -47,13 +52,25 @@
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="排名" min-width="60" prop="rank" sortable="custom"></el-table-column>
+      <el-table-column label="排名" min-width="60" sortable="custom">
+        <template slot-scope="scope">
+          <p v-if="scope.row.rank<10" style="font-size:16px;color:red">{{scope.row.rank}}</p>
+          <p v-else>{{scope.row.rank}}</p>
+        </template>
+      </el-table-column>
       <el-table-column label="点赞" min-width="60" prop="like_num" sortable="custom"></el-table-column>
-      <el-table-column label="带货" min-width="60" prop="with_card" sortable="custom"></el-table-column>
+      <el-table-column label="带货" min-width="60" sortable="custom">
+        <template slot-scope="scope">
+          <p v-if="scope.row.with_card == 1">
+            <i class="el-icon-success" style="font-size:20px;color: green"></i>
+          </p>
+          <p v-if="scope.row.with_card == 0"><i class="el-icon-error"></i></p>
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="操作" width="250">
         <template slot-scope="scope">
           <el-button @click="editQa(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
-          <el-button @click="viewHistory(scope.row)" size="small" type="primary" icon="el-icon-edit">历史</el-button>
+          <el-button @click="viewHistory(scope.row)" size="small" type="success" icon="el-icon-time">趋势</el-button>
           <el-button @click="deleteQa(scope.row)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
         </template>
       </el-table-column>
