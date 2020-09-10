@@ -173,6 +173,11 @@ const typesOptions = [
     type: ''
   },
   {
+    value: 5,
+    label: '生日礼物',
+    type: ''
+  },
+  {
     value: 4,
     label: '教师节礼物',
     type: ''
