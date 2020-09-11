@@ -1,5 +1,28 @@
 <template>
  <div class="big">
+     <div>
+         <el-form :model="goodsData">
+             <el-form-item label="dddd">
+                 <el-input placeholder="搜索条件" v-model="goodsData.aaa"></el-input>
+             </el-form-item>
+         </el-form>
+     </div>
+     <el-table :data="qaStatData" border stripe>
+         <el-table-column label="问题类型" min-width="100" prop="type_desc"></el-table-column>
+         <el-table-column label="问题总数" min-width="100" prop="total"></el-table-column>
+         <el-table-column label="已回答问题数" min-width="100" prop="answer"></el-table-column>
+         <el-table-column label="带货回答数" min-width="100" prop="card_answer"></el-table-column>
+         <el-table-column label="回答占比" min-width="100">
+             <template slot-scope="scope">
+                 {{Math.ceil(scope.row.answer / scope.row.total * 100)}} %
+             </template>
+         </el-table-column>
+         <el-table-column label="带货占比" min-width="100">
+             <template slot-scope="scope">
+                 {{Math.ceil(scope.row.card_answer / scope.row.answer * 100)}} %
+             </template>
+         </el-table-column>
+     </el-table>
      <div class="mid">
          <el-row :gutter="32">
              <el-col :xs="24" :sm="24" :lg="8">
@@ -49,11 +72,18 @@ import Sunburst from "./component/Sunburst"
 import musicPlayer from "./component/musicPlayer"
 import TodoList from "./component/todoList"
 
+import {
+    queryQaStat
+} from '@/api/qa'
+
 export default {
   name: 'Dashboard',
   data() {
     return {
-
+        qaStatData: [],
+        goodsData: {
+            aaa:1
+        },
     }
   },
     components:{
@@ -62,6 +92,10 @@ export default {
         Sunburst, //旭日图
         musicPlayer,  //音乐播放器
         TodoList //TodoList
+    },
+    async created(){
+        const res = await queryQaStat();
+        this.qaStatData = res.data;
     },
   mounted() {
       let myChart = echarts.init(document.getElementById('main'),'macarons');

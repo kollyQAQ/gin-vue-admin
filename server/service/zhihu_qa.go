@@ -103,3 +103,45 @@ func QueryQuestionHistory(qid string) (err error, list []model.ZhihuQuestionHist
 
 	return err, qaList
 }
+
+func QueryQaStat() (err error, list []*model.ZhihuQaStat) {
+	querySql := `
+		SELECT 
+			a.type, a.total, b.answer, c.card_answer
+		FROM (
+			SELECT 
+				type,
+				count(*) AS total
+			FROM view_question_answer
+			GROUP BY type
+		) a INNER JOIN (
+			SELECT 
+				type,
+				count(*) AS answer
+			FROM view_question_answer
+			WHERE aid != ''
+			GROUP BY type
+		) b on a.type = b.type
+		LEFT JOIN (
+			SELECT 
+				type,
+				count(*) AS card_answer
+			FROM view_question_answer
+			WHERE aid != '' and with_card = 1
+			GROUP BY type
+		) c on a.type = c.type
+	`
+	err = global.GVA_DB.Raw(querySql).Scan(&list).Error
+
+	return err, list
+}
+
+func GetQuestionTypeMap() map[int]string {
+	return map[int]string{
+		1: "礼物",
+		2: "乳胶枕",
+		3: "按摩仪",
+		4: "教师节礼物",
+		5: "生日礼物",
+	}
+}

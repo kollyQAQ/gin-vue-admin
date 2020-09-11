@@ -58,3 +58,11 @@ type ZhihuQuestionHistory struct {
 func (ZhihuQuestionHistory) TableName() string {
 	return "view_question_history"
 }
+
+type ZhihuQaStat struct {
+	Type       int    `json:"type"`
+	TypeDesc   string `json:"type_desc"`
+	Total      int    `json:"total"`
+	Answer     int    `json:"answer"`
+	CardAnswer int    `json:"card_answer"`
+}

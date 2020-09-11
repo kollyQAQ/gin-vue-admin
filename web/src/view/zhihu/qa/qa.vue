@@ -280,7 +280,6 @@ export default {
     async viewHistory(row) {
       this.dialogHisVisible = true
       const res = await queryQaHistory({ id: row.qid })
-      console.log(res.data)
       this.historyData = res.data
       // this.historyData = [
       //   ['date', '09-01', '09-02', '09-03', '09-04', '09-05', '09-06', '09-07'],
