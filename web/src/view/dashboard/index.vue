@@ -74,7 +74,7 @@ import TodoList from "./component/todoList"
 
 import {
     queryQaStat
-} from '@/api/qa'
+} from '@/api/stat'
 
 export default {
   name: 'Dashboard',

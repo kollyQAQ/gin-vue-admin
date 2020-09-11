@@ -39,6 +39,9 @@
 
 <script>
     import Todo from './Todo.vue'
+    import {
+        queryTodoList
+    } from '@/api/stat'
 
     const STORAGE_KEY = 'todos'
     const filters = {
@@ -46,11 +49,6 @@
         active: todos => todos.filter(todo => !todo.done),
         completed: todos => todos.filter(todo => todo.done)
     }
-    const defalutList = [
-        { text: 'star this repository', done: false },
-        { text: 'follow author', done: false },
-        { text: 'vue-element-admin', done: true }
-    ]
     export default {
         components: { Todo },
         filters: {
@@ -62,7 +60,7 @@
                 visibility: 'all',
                 filters,
                 // todos: JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || defalutList
-                todos: defalutList
+                todos: []
             }
         },
         computed: {
@@ -113,6 +111,10 @@
                     this.setLocalStorage()
                 })
             }
+        },
+        async created(){
+            const res = await queryTodoList();
+            this.todos = res.data;
         }
     }
 </script>

@@ -2,6 +2,9 @@
     <div>
         <div style="width: 100%">
             <APlayer :audio="audio"></APlayer>
+            <div>
+                管理歌曲
+            </div>
         </div>
     </div>
 </template>
@@ -21,6 +24,13 @@
                         artist: '纳豆',
                         url: 'http://music.163.com/song/media/outer/url?id=1321594530.mp3',
                         cover: 'https://p1.music.126.net/5zs7IvmLv7KahY3BFzUmrg==/109951163635241613.jpg?param=300y300', // prettier-ignore
+                        lrc: 'https://cdn.moefe.org/music/lrc/thing.lrc',
+                    },
+                    {
+                        name: '我和我的祖国',
+                        artist: '王菲',
+                        url: 'http://music.163.com/song/media/outer/url?id=1392990601.mp3',
+                        cover: 'http://p1.music.126.net/HeGrAKPiZhKkONiFDxZvmw==/109951164384346866.jpg?param=130y130', // prettier-ignore
                         lrc: 'https://cdn.moefe.org/music/lrc/thing.lrc',
                     },
                     {

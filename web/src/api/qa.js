@@ -47,11 +47,3 @@ export const queryQaHistory = (data) => {
         data
     })
 }
-
-export const queryQaStat = (data) => {
-    return service({
-        url: "/zhihu/queryQaStat",
-        method: 'post',
-        data
-    })
-}

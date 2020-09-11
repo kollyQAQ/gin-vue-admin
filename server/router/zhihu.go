@@ -29,5 +29,7 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 		ApiRouter.POST("createCollection", v1.CreateCollection)   // 创建新收藏
 		ApiRouter.POST("updateCollection", v1.UpdateCollection)   // 修改收藏信息
 		ApiRouter.POST("deleteCollection", v1.DeleteCollection)   // 删除收藏
+
+		ApiRouter.POST("queryTodoList", v1.GetTodoList) // 查询TODO列表
 	}
 }

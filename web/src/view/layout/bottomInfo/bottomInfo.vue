@@ -1,15 +1,15 @@
 <template>
   <div class="bottom-info">
     <div>
-      <span>Powered by</span>
-      <span>
-      <a href="https://github.com/flipped-aurora/gin-vue-admin">gin-vue-admin</a>
-      </span>
-      <el-divider direction="vertical"></el-divider>
-      <span>Copyright</span>
-      <span>
-      <a href="https://github.com/flipped-aurora">flipped-aurora团队</a>
-      </span>
+<!--      <span>Powered by</span>-->
+<!--      <span>-->
+<!--      <a href="https://github.com/flipped-aurora/gin-vue-admin">gin-vue-admin</a>-->
+<!--      </span>-->
+<!--      <el-divider direction="vertical"></el-divider>-->
+<!--      <span>Copyright</span>-->
+<!--      <span>-->
+<!--      <a href="https://github.com/flipped-aurora">flipped-aurora团队</a>-->
+<!--      </span>-->
     </div>
   </div>
 </template>

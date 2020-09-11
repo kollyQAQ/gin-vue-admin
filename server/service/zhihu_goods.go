@@ -30,7 +30,7 @@ func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order stri
 		db = db.Where("fee_rate <= ?", goods.FeeRate)
 	}
 
-	err = db.Count(&total).Error
+	err = db.Debug().Count(&total).Error
 
 	if err != nil {
 		return err, goodsList, total
@@ -43,9 +43,9 @@ func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order stri
 			} else {
 				OrderStr = order
 			}
-			err = db.Order(OrderStr, true).Find(&goodsList).Error
+			err = db.Debug().Order(OrderStr, true).Find(&goodsList).Error
 		} else {
-			err = db.Order("fee_rate desc", true).Find(&goodsList).Error
+			err = db.Debug().Order("fee_rate desc", true).Find(&goodsList).Error
 		}
 	}
 	return err, goodsList, total
