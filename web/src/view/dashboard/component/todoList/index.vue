@@ -2,12 +2,14 @@
     <section class="todoapp">
         <!-- header -->
         <header class="header">
-            <input class="new-todo" autocomplete="off" placeholder="Todo List" @keyup.enter="addTodo">
+<!--            <i class="el-icon-plus" />-->
+<!--            <svg-icon icon-class="todo"/>-->
+            <input class="new-todo" autocomplete="off" placeholder="请输入待办事项" @keyup.enter="addTodo">
         </header>
         <!-- main section -->
         <section v-show="todos.length" class="main">
-            <input id="toggle-all" :checked="allChecked" class="toggle-all" type="checkbox" @change="toggleAll({ done: !allChecked })">
-            <label for="toggle-all" />
+<!--            <input id="toggle-all" :checked="allChecked" class="toggle-all" type="checkbox" @change="toggleAll({ done: !allChecked })">-->
+<!--            <label for="toggle-all" />-->
             <ul class="todo-list">
                 <todo
                         v-for="(todo, index) in filteredTodos"
@@ -40,7 +42,10 @@
 <script>
     import Todo from './Todo.vue'
     import {
-        queryTodoList
+        queryTodoList,
+        addTodo,
+        updateTodo,
+        deleteTodo,
     } from '@/api/stat'
 
     const STORAGE_KEY = 'todos'
@@ -57,7 +62,7 @@
         },
         data() {
             return {
-                visibility: 'all',
+                visibility: 'active',
                 filters,
                 // todos: JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || defalutList
                 todos: []
@@ -78,28 +83,59 @@
             setLocalStorage() {
                 window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos))
             },
-            addTodo(e) {
+            async addTodo(e) {
                 const text = e.target.value
                 if (text.trim()) {
-                    this.todos.push({
-                        text,
-                        done: false
+                    const res = await addTodo({
+                        text: text,
+                        status: 0,
                     })
-                    this.setLocalStorage()
+                    if (res.code === 0) {
+                        this.$message({
+                            type: 'success',
+                            message: '添加成功',
+                            showClose: true
+                        })
+                        const res = await queryTodoList();
+                        this.todos = res.data;
+                    }
                 }
                 e.target.value = ''
             },
-            toggleTodo(val) {
+            async toggleTodo(val) {
                 val.done = !val.done
-                this.setLocalStorage()
+                val.status = (val.status + 1) % 2
+                const res = await updateTodo(val)
+                if (res.code === 0) {
+                    this.$message({
+                        type: 'success',
+                        message: '修改成功',
+                        showClose: true
+                    })
+                }
             },
-            deleteTodo(todo) {
-                this.todos.splice(this.todos.indexOf(todo), 1)
-                this.setLocalStorage()
+            async deleteTodo(todo) {
+                const res = await deleteTodo(todo)
+                if (res.code === 0) {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功',
+                        showClose: true
+                    })
+                    const res = await queryTodoList();
+                    this.todos = res.data;
+                }
             },
-            editTodo({ todo, value }) {
+            async editTodo({ todo, value }) {
                 todo.text = value
-                this.setLocalStorage()
+                const res = await updateTodo(todo)
+                if (res.code === 0) {
+                    this.$message({
+                        type: 'success',
+                        message: '修改成功',
+                        showClose: true
+                    })
+                }
             },
             clearCompleted() {
                 this.todos = this.todos.filter(todo => !todo.done)

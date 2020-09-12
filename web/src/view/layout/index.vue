@@ -3,10 +3,10 @@
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
       <el-row :class="[isShadowBg?'shadowBg':'']" @click.native="changeShadow()"></el-row>
       <el-aside class="main-cont main-left">
-        <div class="tilte">
-<!--          <img alt class="logoimg" src="~@/assets/zhihu.png" />-->
-          <h2 class="tit-text" v-if="isSider">Zhihu-Data</h2>
-        </div>
+<!--        <div class="tilte">-->
+<!--&lt;!&ndash;          <img alt class="logoimg" src="~@/assets/zhihu.png" />&ndash;&gt;-->
+<!--          <h2 class="tit-text" v-if="isSider">Zhihu-Data</h2>-->
+<!--        </div>-->
         <Aside class="aside" />
       </el-aside>
       <!-- 分块滑动功能 -->

@@ -1,64 +1,65 @@
 <template>
  <div class="big">
-     <div>
-         <el-form :model="goodsData">
-             <el-form-item label="dddd">
-                 <el-input placeholder="搜索条件" v-model="goodsData.aaa"></el-input>
-             </el-form-item>
-         </el-form>
-     </div>
-     <el-table :data="qaStatData" border stripe>
-         <el-table-column label="问题类型" min-width="100" prop="type_desc"></el-table-column>
-         <el-table-column label="问题总数" min-width="100" prop="total"></el-table-column>
-         <el-table-column label="已回答问题数" min-width="100" prop="answer"></el-table-column>
-         <el-table-column label="带货回答数" min-width="100" prop="card_answer"></el-table-column>
-         <el-table-column label="回答占比" min-width="100">
-             <template slot-scope="scope">
-                 {{Math.ceil(scope.row.answer / scope.row.total * 100)}} %
-             </template>
-         </el-table-column>
-         <el-table-column label="带货占比" min-width="100">
-             <template slot-scope="scope">
-                 {{Math.ceil(scope.row.card_answer / scope.row.answer * 100)}} %
-             </template>
-         </el-table-column>
-     </el-table>
-     <div class="mid">
-         <el-row :gutter="32">
-             <el-col :xs="24" :sm="24" :lg="8">
-                 <div class="chart-wrapper">
-                     <raddar-chart />
+     <el-row :gutter="20">
+         <el-col :xs="24" :sm="24" :lg="17">
+             <div class="left">
+                 <div class="stat">
+                     <panel-group/>
+                     <el-table :data="qaStatData" border stripe>
+                         <el-table-column label="问题类型" min-width="100" prop="type_desc"></el-table-column>
+                         <el-table-column label="问题总数" min-width="100" prop="total"></el-table-column>
+                         <el-table-column label="已回答问题数" min-width="100" prop="answer"></el-table-column>
+                         <el-table-column label="带货回答数" min-width="100" prop="card_answer"></el-table-column>
+                         <el-table-column label="回答占比" min-width="100">
+                             <template slot-scope="scope">
+                                 {{Math.ceil(scope.row.answer / scope.row.total * 100)}} %
+                             </template>
+                         </el-table-column>
+                         <el-table-column label="带货占比" min-width="100">
+                             <template slot-scope="scope">
+                                 {{Math.ceil(scope.row.card_answer / scope.row.answer * 100)}} %
+                             </template>
+                         </el-table-column>
+                     </el-table>
                  </div>
-             </el-col>
-             <el-col :xs="24" :sm="24" :lg="8">
-                 <div class="chart-wrapper">
-                     <stackMap />
+                 <div class="mid">
+                     <el-row :gutter="20">
+                         <el-col :xs="24" :sm="24" :lg="12">
+                             <div class="chart-wrapper">
+                                 <raddar-chart />
+                             </div>
+                         </el-col>
+                         <el-col :xs="24" :sm="24" :lg="12">
+                             <div class="chart-wrapper">
+                                 <stackMap />
+                             </div>
+                         </el-col>
+<!--                         <el-col :xs="24" :sm="24" :lg="8">-->
+<!--                             <div class="chart-wrapper">-->
+<!--                                 <Sunburst/>-->
+<!--                             </div>-->
+<!--                         </el-col>-->
+                     </el-row>
                  </div>
-             </el-col>
-             <el-col :xs="24" :sm="24" :lg="8">
-                 <div class="chart-wrapper">
-                     <Sunburst/>
+                 <div class="top">
+                     <div id="main" class="chart-container"></div>
                  </div>
-             </el-col>
-         </el-row>
-     </div>
-     <div class="top">
-         <div id="main" class="chart-container"></div>
-     </div>
-      <div class="bottom">
-         <el-row :gutter="32">
-             <el-col :xs="24" :sm="24" :lg="12">
-                 <div class="chart-player">
-                     <musicPlayer />
+             </div>
+         </el-col>
+         <el-col :xs="24" :sm="24" :lg="7">
+             <div class="bottom">
+                 <div  class="chart-player">
+                     <box-card />
                  </div>
-             </el-col>
-             <el-col :xs="24" :sm="24" :lg="12">
                  <div  class="chart-player">
                      <todo-list />
                  </div>
-             </el-col>
-         </el-row>
-     </div>
+                 <div class="chart-player">
+                     <musicPlayer />
+                 </div>
+             </div>
+         </el-col>
+     </el-row>
  </div>
 
 </template>
@@ -68,9 +69,11 @@ import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import RaddarChart from "./component/RaddarChart"
 import stackMap from "./component/stackMap"
-import Sunburst from "./component/Sunburst"
+// import Sunburst from "./component/Sunburst"
 import musicPlayer from "./component/musicPlayer"
 import TodoList from "./component/todoList"
+import PanelGroup from './component/PanelGroup'
+import BoxCard from './component/BoxCard'
 
 import {
     queryQaStat
@@ -81,17 +84,16 @@ export default {
   data() {
     return {
         qaStatData: [],
-        goodsData: {
-            aaa:1
-        },
     }
   },
     components:{
         RaddarChart, //雷达图
         stackMap, //堆叠图
-        Sunburst, //旭日图
+        // Sunburst, //旭日图
         musicPlayer,  //音乐播放器
-        TodoList //TodoList
+        TodoList, //TodoList
+        PanelGroup,
+        BoxCard
     },
     async created(){
         const res = await queryQaStat();
@@ -205,11 +207,15 @@ export default {
         margin:100px 0 0 0;
         padding-top: 0;
         background-color: rgb(243,243,243);;
-        .top{
-            width: 100%;
-            height: 360px;
-            margin-top: 20px;
-            overflow: hidden;
+        .left{
+            .stat{
+
+            }
+            .top{
+                width: 100%;
+                height: 360px;
+                margin-top: 20px;
+                overflow: hidden;
             .chart-container{
                 position: relative;
                 width: 100%;
@@ -217,27 +223,27 @@ export default {
                 padding: 20px;
                 background-color: #fff;
             }
-        }
-        .mid{
-            width: 100%;
-            height: 380px;
+            }
+            .mid{
+                width: 100%;
+                height: 380px;
             .chart-wrapper {
                 height: 340px;
                 background: #fff;
                 padding: 16px 16px 0;
                 margin-bottom: 32px;
             }
+            }
         }
         .bottom{
-            width: 100%;
-            height: 300px;
+            /*height: 300px;*/
             margin: 20px 0;
             .el-row{
                 margin-right: 4px !important;
             }
             .chart-player{
                 width: 100%;
-                height: 270px;
+                /*height: 270px;*/
                 padding: 10px;
                 background-color: #fff;
             }
