@@ -35,7 +35,12 @@
           <div class="card-panel-text">
             无佣商品
           </div>
-          <count-to :start-val="0" :end-val="stat.noFeeGoodsNum" :duration="duration" class="card-panel-num" />
+          <div v-if="stat.noFeeGoodsNum < 1">
+            <count-to :start-val="0" :end-val="stat.noFeeGoodsNum" :duration="duration" class="card-panel-num" />
+          </div>
+          <div v-else>
+            <count-to :start-val="0" :end-val="stat.noFeeGoodsNum" :duration="duration" class="card-panel-num" style="color:red" />
+          </div>
         </div>
       </div>
     </el-col>
