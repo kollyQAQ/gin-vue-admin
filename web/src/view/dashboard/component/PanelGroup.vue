@@ -7,7 +7,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            回答总浏览
+            今日浏览
           </div>
           <count-to :start-val="0" :end-val="stat.totalView" :duration="duration" class="card-panel-num" />
         </div>
@@ -20,7 +20,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            预估支出
+            预估收入
           </div>
           <count-to :start-val="0" :end-val="stat.totalFee" :duration="duration" :prefix='prefix' class="card-panel-num" />
         </div>
@@ -28,8 +28,8 @@
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
+        <div class="card-panel-icon-wrapper icon-shopping">
+          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
@@ -41,12 +41,13 @@
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="skill" class-name="card-panel-icon" />
+<!--          <svg-icon icon-class="message" class-name="card-panel-icon" />-->
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            待完成任务
+            待办任务
           </div>
           <count-to :start-val="0" :end-val="stat.todoNum" :duration="duration" class="card-panel-num" />
         </div>
@@ -94,7 +95,7 @@ export default {
         this.stat.totalFee = res.data.stat.today_fee;
         this.stat.noFeeGoodsNum = res.data.stat.no_fee_goods_num;
         this.stat.todoNum = res.data.stat.todo_number;
-      },30000)
+      },60000)
     }
   },
   destroyed(){
