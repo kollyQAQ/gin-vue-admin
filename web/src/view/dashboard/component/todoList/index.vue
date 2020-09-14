@@ -2,7 +2,7 @@
     <section class="todoapp">
         <!-- header -->
         <header class="header">
-            <svg-icon icon-class="todo"/>
+            <svg-icon icon-class="edit" class-name="card-panel-icon" style="padding-left: 14px;"/>
             <input class="new-todo" autocomplete="off" placeholder="请输入待办事项" @keyup.enter="addTodo">
         </header>
         <!-- main section -->

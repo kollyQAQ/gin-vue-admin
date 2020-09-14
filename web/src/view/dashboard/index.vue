@@ -5,25 +5,25 @@
              <div class="left">
                  <div class="stat">
                      <panel-group/>
-<!--                     <el-table :data="qaStatData" border stripe>-->
-<!--                         <el-table-column label="问题类型" min-width="100" prop="type_desc"></el-table-column>-->
-<!--                         <el-table-column label="问题总数" min-width="100" prop="total"></el-table-column>-->
-<!--                         <el-table-column label="已回答问题数" min-width="100" prop="answer"></el-table-column>-->
-<!--                         <el-table-column label="带货回答数" min-width="100" prop="card_answer"></el-table-column>-->
-<!--                         <el-table-column label="回答占比" min-width="100">-->
-<!--                             <template slot-scope="scope">-->
-<!--                                 <p v-if="Math.ceil(scope.row.answer / scope.row.total * 100)<60" style="font-size:16px;color:red">-->
-<!--                                     {{Math.ceil(scope.row.answer / scope.row.total * 100)}}%-->
-<!--                                 </p>-->
-<!--                                 <p v-else>{{Math.ceil(scope.row.answer / scope.row.total * 100)}}%</p>-->
-<!--                             </template>-->
-<!--                         </el-table-column>-->
-<!--                         <el-table-column label="带货占比" min-width="100">-->
-<!--                             <template slot-scope="scope">-->
-<!--                                 {{Math.ceil(scope.row.card_answer / scope.row.answer * 100)}}%-->
-<!--                             </template>-->
-<!--                         </el-table-column>-->
-<!--                     </el-table>-->
+                     <el-table :data="qaStatData" border stripe>
+                         <el-table-column label="问题类型" min-width="100" prop="type_desc"></el-table-column>
+                         <el-table-column label="问题总数" min-width="100" prop="total"></el-table-column>
+                         <el-table-column label="已回答问题数" min-width="100" prop="answer"></el-table-column>
+                         <el-table-column label="带货回答数" min-width="100" prop="card_answer"></el-table-column>
+                         <el-table-column label="回答占比" min-width="100">
+                             <template slot-scope="scope">
+                                 <p v-if="Math.ceil(scope.row.answer / scope.row.total * 100)<60" style="font-size:16px;color:red">
+                                     {{Math.ceil(scope.row.answer / scope.row.total * 100)}}%
+                                 </p>
+                                 <p v-else>{{Math.ceil(scope.row.answer / scope.row.total * 100)}}%</p>
+                             </template>
+                         </el-table-column>
+                         <el-table-column label="带货占比" min-width="100">
+                             <template slot-scope="scope">
+                                 {{Math.ceil(scope.row.card_answer / scope.row.answer * 100)}}%
+                             </template>
+                         </el-table-column>
+                     </el-table>
                  </div>
                  <div class="mid">
                      <el-row :gutter="20">
@@ -53,11 +53,11 @@
              <div  class="chart-player">
                  <box-card />
              </div>
-<!--             <div class="bottom">-->
-<!--                 <div  class="chart-player">-->
-<!--                     <todo-list />-->
-<!--                 </div>-->
-<!--             </div>-->
+             <div class="bottom">
+                 <div  class="chart-player">
+                     <todo-list />
+                 </div>
+             </div>
              <div class="bottom">
                  <div class="chart-player">
                      <musicPlayer />
