@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="40" class="panel-group">
+  <el-row :gutter="40" class="panel-group" style="margin-top: 0">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
@@ -9,20 +9,7 @@
           <div class="card-panel-text">
             回答总浏览
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            无佣金商品
-          </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="stat.totalView" :duration="duration" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -33,9 +20,22 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            今日付款佣金
+            预估支出
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="stat.totalFee" :duration="duration" :prefix='prefix' class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="message" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            无佣商品
+          </div>
+          <count-to :start-val="0" :end-val="stat.noFeeGoodsNum" :duration="duration" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -48,7 +48,7 @@
           <div class="card-panel-text">
             待完成任务
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="stat.todoNum" :duration="duration" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -58,15 +58,55 @@
 <script>
 import CountTo from 'vue-count-to'
 
+import {
+  queryStat
+} from '@/api/stat'
+
 export default {
   components: {
     CountTo
+  },
+  data() {
+    return {
+        prefix:'￥ ',
+        duration: 1000,
+        stat: {
+          totalView:0,
+          totalFee:0,
+          noFeeGoodsNum:0,
+          todoNum:0
+        },
+    };
   },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
     }
-  }
+  },
+  mounted(){
+    if(this.timer){
+      clearInterval(this.timer)
+    }else{
+      this.timer = setInterval(async ()=>{
+        // 调用相应的接口，渲染数据
+        const res = await queryStat();
+        this.stat.totalView = res.data.stat.today_view;
+        this.stat.totalFee = res.data.stat.today_fee;
+        this.stat.noFeeGoodsNum = res.data.stat.no_fee_goods_num;
+        this.stat.todoNum = res.data.stat.todo_number;
+      },30000)
+    }
+  },
+  destroyed(){
+    clearInterval(this.timer)
+  },
+  async created(){
+    const res = await queryStat();
+    this.stat.totalView = res.data.stat.today_view;
+    this.stat.totalFee = res.data.stat.today_fee;
+    this.stat.noFeeGoodsNum = res.data.stat.no_fee_goods_num;
+    this.stat.todoNum = res.data.stat.todo_number;
+  },
 }
 </script>
 

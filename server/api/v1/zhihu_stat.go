@@ -4,10 +4,34 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 
 	"github.com/gin-gonic/gin"
 )
+
+func QueryStat(c *gin.Context) {
+	err1, list := service.QueryQaStat()
+	if err1 != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err1), c)
+	}
+
+	err2, data := service.QueryStat()
+	if err2 != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err2), c)
+	}
+
+	typeMap := service.GetQuestionTypeMap()
+	for _, item := range list {
+		item.TypeDesc = typeMap[item.Type]
+	}
+
+	response.OkWithData(resp.ZhihuStatResponse{
+		QaStat: list,
+		Stat:   data,
+	}, c)
+
+}
 
 func GetMusicList(c *gin.Context) {
 	err, list := service.GetMusicList()

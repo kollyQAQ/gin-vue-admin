@@ -1,8 +1,8 @@
 import service from '@/utils/request'
 
-export const queryQaStat = (data) => {
+export const queryStat = (data) => {
     return service({
-        url: "/zhihu/queryQaStat",
+        url: "/zhihu/queryStat",
         method: 'post',
         data
     })

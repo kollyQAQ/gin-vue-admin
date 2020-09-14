@@ -2,14 +2,11 @@
     <section class="todoapp">
         <!-- header -->
         <header class="header">
-<!--            <i class="el-icon-plus" />-->
-<!--            <svg-icon icon-class="todo"/>-->
+            <svg-icon icon-class="todo"/>
             <input class="new-todo" autocomplete="off" placeholder="请输入待办事项" @keyup.enter="addTodo">
         </header>
         <!-- main section -->
         <section v-show="todos.length" class="main">
-<!--            <input id="toggle-all" :checked="allChecked" class="toggle-all" type="checkbox" @change="toggleAll({ done: !allChecked })">-->
-<!--            <label for="toggle-all" />-->
             <ul class="todo-list">
                 <todo
                         v-for="(todo, index) in filteredTodos"
@@ -32,9 +29,6 @@
                     <a :class="{ selected: visibility === key }" @click.prevent="visibility = key">{{ key | capitalize }}</a>
                 </li>
             </ul>
-            <!-- <button class="clear-completed" v-show="todos.length > remaining" @click="clearCompleted">
-              Clear completed
-            </button> -->
         </footer>
     </section>
 </template>

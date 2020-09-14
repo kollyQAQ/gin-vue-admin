@@ -129,6 +129,11 @@ const methodOptions = [
     value: '按摩椅',
     label: '按摩椅',
     type: ''
+  },
+  {
+    value: '床垫',
+    label: '床垫',
+    type: ''
   }
 ]
 

@@ -22,13 +22,14 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 		ApiRouter.POST("updateQa", v1.UpdateQa)           // 修改问答信息
 		ApiRouter.POST("deleteQa", v1.DeleteQa)           // 删除问答
 		ApiRouter.POST("queryQaHistory", v1.QueryHistory) // 查看问答历史
-		ApiRouter.POST("queryQaStat", v1.QueryQaStat)     // 查看问答历史
 
 		ApiRouter.POST("getCollectionList", v1.GetCollection)     // 获取收藏列表
 		ApiRouter.POST("getCollectionById", v1.GetCollectionById) // 更新单个收藏信息
 		ApiRouter.POST("createCollection", v1.CreateCollection)   // 创建新收藏
 		ApiRouter.POST("updateCollection", v1.UpdateCollection)   // 修改收藏信息
 		ApiRouter.POST("deleteCollection", v1.DeleteCollection)   // 删除收藏
+
+		ApiRouter.POST("queryStat", v1.QueryStat) // 统计数据
 
 		ApiRouter.POST("queryTodoList", v1.GetTodoList) // 查询TODO列表
 		ApiRouter.POST("addTodo", v1.AddTodo)           // 添加TODO

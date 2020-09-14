@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
 )
 
 func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int) {
@@ -134,6 +135,31 @@ func QueryQaStat() (err error, list []*model.ZhihuQaStat) {
 	err = global.GVA_DB.Raw(querySql).Scan(&list).Error
 
 	return err, list
+}
+
+func QueryStat() (err error, data resp.ZhihuStat) {
+	querySql := `
+		SELECT 
+			a.no_fee_goods_num,
+			b.today_fee,
+			c.todo_number,
+			d.today_view
+		FROM (
+			SELECT '1' as id, COUNT(*) as no_fee_goods_num FROM t_zhihu_goods where fee_rate = 0
+		) a
+		LEFT JOIN (
+			SELECT '1' as id, ROUND(SUM(fee)) as today_fee FROM t_zhihu_order where to_days(order_time) = to_days(now())
+		) b ON a.id = b.id
+		LEFT JOIN (
+			SELECT '1' as id, COUNT(*) as todo_number FROM t_todo where status = 0
+		) c ON a.id = c.id
+		LEFT JOIN (
+			SELECT '1' as id, SUM(today_add_view) as today_view FROM view_question_answer
+		) d ON a.id = d.id
+	`
+	err = global.GVA_DB.Raw(querySql).Scan(&data).Error
+
+	return err, data
 }
 
 func GetQuestionTypeMap() map[int]string {

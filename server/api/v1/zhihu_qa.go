@@ -133,17 +133,3 @@ func QueryHistory(c *gin.Context) {
 		response.OkWithData(res, c)
 	}
 }
-
-func QueryQaStat(c *gin.Context) {
-	err, list := service.QueryQaStat()
-	typeMap := service.GetQuestionTypeMap()
-	for _, item := range list {
-		item.TypeDesc = typeMap[item.Type]
-	}
-
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
-	} else {
-		response.OkWithData(list, c)
-	}
-}

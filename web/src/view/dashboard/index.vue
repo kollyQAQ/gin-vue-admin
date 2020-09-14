@@ -5,22 +5,25 @@
              <div class="left">
                  <div class="stat">
                      <panel-group/>
-                     <el-table :data="qaStatData" border stripe>
-                         <el-table-column label="问题类型" min-width="100" prop="type_desc"></el-table-column>
-                         <el-table-column label="问题总数" min-width="100" prop="total"></el-table-column>
-                         <el-table-column label="已回答问题数" min-width="100" prop="answer"></el-table-column>
-                         <el-table-column label="带货回答数" min-width="100" prop="card_answer"></el-table-column>
-                         <el-table-column label="回答占比" min-width="100">
-                             <template slot-scope="scope">
-                                 {{Math.ceil(scope.row.answer / scope.row.total * 100)}} %
-                             </template>
-                         </el-table-column>
-                         <el-table-column label="带货占比" min-width="100">
-                             <template slot-scope="scope">
-                                 {{Math.ceil(scope.row.card_answer / scope.row.answer * 100)}} %
-                             </template>
-                         </el-table-column>
-                     </el-table>
+<!--                     <el-table :data="qaStatData" border stripe>-->
+<!--                         <el-table-column label="问题类型" min-width="100" prop="type_desc"></el-table-column>-->
+<!--                         <el-table-column label="问题总数" min-width="100" prop="total"></el-table-column>-->
+<!--                         <el-table-column label="已回答问题数" min-width="100" prop="answer"></el-table-column>-->
+<!--                         <el-table-column label="带货回答数" min-width="100" prop="card_answer"></el-table-column>-->
+<!--                         <el-table-column label="回答占比" min-width="100">-->
+<!--                             <template slot-scope="scope">-->
+<!--                                 <p v-if="Math.ceil(scope.row.answer / scope.row.total * 100)<60" style="font-size:16px;color:red">-->
+<!--                                     {{Math.ceil(scope.row.answer / scope.row.total * 100)}}%-->
+<!--                                 </p>-->
+<!--                                 <p v-else>{{Math.ceil(scope.row.answer / scope.row.total * 100)}}%</p>-->
+<!--                             </template>-->
+<!--                         </el-table-column>-->
+<!--                         <el-table-column label="带货占比" min-width="100">-->
+<!--                             <template slot-scope="scope">-->
+<!--                                 {{Math.ceil(scope.row.card_answer / scope.row.answer * 100)}}%-->
+<!--                             </template>-->
+<!--                         </el-table-column>-->
+<!--                     </el-table>-->
                  </div>
                  <div class="mid">
                      <el-row :gutter="20">
@@ -47,13 +50,15 @@
              </div>
          </el-col>
          <el-col :xs="24" :sm="24" :lg="7">
+             <div  class="chart-player">
+                 <box-card />
+             </div>
+<!--             <div class="bottom">-->
+<!--                 <div  class="chart-player">-->
+<!--                     <todo-list />-->
+<!--                 </div>-->
+<!--             </div>-->
              <div class="bottom">
-                 <div  class="chart-player">
-                     <box-card />
-                 </div>
-                 <div  class="chart-player">
-                     <todo-list />
-                 </div>
                  <div class="chart-player">
                      <musicPlayer />
                  </div>
@@ -76,14 +81,14 @@ import PanelGroup from './component/PanelGroup'
 import BoxCard from './component/BoxCard'
 
 import {
-    queryQaStat
+    queryStat
 } from '@/api/stat'
 
 export default {
   name: 'Dashboard',
   data() {
     return {
-        qaStatData: [],
+        qaStatData: []
     }
   },
     components:{
@@ -96,8 +101,8 @@ export default {
         BoxCard
     },
     async created(){
-        const res = await queryQaStat();
-        this.qaStatData = res.data;
+        const res = await queryStat();
+        this.qaStatData = res.data.qa_stat;
     },
   mounted() {
       let myChart = echarts.init(document.getElementById('main'),'macarons');
