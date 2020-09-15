@@ -121,7 +121,9 @@ export default {
   margin-top: 18px;
 
   .card-panel-col {
-    margin-bottom: 32px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .card-panel {
@@ -175,7 +177,7 @@ export default {
 
     .card-panel-icon-wrapper {
       float: left;
-      margin: 14px 0 0 14px;
+      margin: 14px 0 0 6px;
       padding: 16px;
       transition: all 0.38s ease-out;
       border-radius: 6px;
@@ -189,7 +191,7 @@ export default {
     .card-panel-description {
       float: right;
       font-weight: bold;
-      margin: 26px;
+      margin: 26px 20px 26px 0px;
       margin-left: 0px;
 
       .card-panel-text {

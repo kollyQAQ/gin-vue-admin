@@ -44,8 +44,6 @@ export default {
     onEditorFocus() {}, // 获得焦点事件
     onEditorChange() {}, // 内容改变事件
     saveHtml() {
-      console.log(2222)
-      console.log(this.content)
     }, // 保存方法
     submit(){}
   }

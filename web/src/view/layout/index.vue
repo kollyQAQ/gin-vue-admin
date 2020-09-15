@@ -313,7 +313,7 @@ $mainHight: 100vh;
       height: calc(100vh - 64px) !important;
       visibility: auto;
       &:not(.el-menu--collapse) {
-        width: 220px;
+        width: 200px;
       }
     }
     .el-menu--collapse {

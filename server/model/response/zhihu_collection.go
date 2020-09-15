@@ -3,7 +3,7 @@ package response
 import "gin-vue-admin/model"
 
 type ZhihuCollectionResponse struct {
-	Collection model.ZhihuCollection `json:"collection"`
+	Collection model.ZhihuCollectionWithContent `json:"collection"`
 }
 
 type ZhihuCollectionListResponse struct {

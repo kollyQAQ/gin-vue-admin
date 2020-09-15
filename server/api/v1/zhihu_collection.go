@@ -51,7 +51,7 @@ func GetCollectionById(c *gin.Context) {
 }
 
 func UpdateCollection(c *gin.Context) {
-	var collection model.ZhihuCollection
+	var collection model.ZhihuCollectionWithContent
 	_ = c.ShouldBindJSON(&collection)
 	ApiVerify := utils.Rules{
 		"SkuID": {utils.NotEmpty()},
@@ -70,7 +70,7 @@ func UpdateCollection(c *gin.Context) {
 }
 
 func CreateCollection(c *gin.Context) {
-	var collection model.ZhihuCollection
+	var collection model.ZhihuCollectionWithContent
 	_ = c.ShouldBindJSON(&collection)
 
 	err := service.CreateCollection(collection)
