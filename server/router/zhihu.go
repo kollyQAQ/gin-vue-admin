@@ -31,11 +31,13 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 
 		ApiRouter.POST("queryStat", v1.QueryStat) // 统计数据
 
+		ApiRouter.POST("queryMusicList", v1.GetMusicList) // 查询Music列表
+
+		ApiRouter.POST("queryPlanList", v1.GetPlanList) // 查询TODO列表
+
 		ApiRouter.POST("queryTodoList", v1.GetTodoList) // 查询TODO列表
 		ApiRouter.POST("addTodo", v1.AddTodo)           // 添加TODO
 		ApiRouter.POST("updateTodo", v1.UpdateTodo)     // 更新TODO
 		ApiRouter.POST("deleteTodo", v1.DeleteTodo)     // 删除TODO
-
-		ApiRouter.POST("queryMusicList", v1.GetMusicList) // 查询Music列表
 	}
 }

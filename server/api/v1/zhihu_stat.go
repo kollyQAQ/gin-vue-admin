@@ -43,6 +43,34 @@ func GetMusicList(c *gin.Context) {
 	}
 }
 
+func GetPlanList(c *gin.Context) {
+	err, list := service.GetPlanList()
+
+	var todo, doing, done, inbox []*model.ZhihuPlan
+	for _, item := range list {
+		if item.Status == 0 {
+			inbox = append(inbox, item)
+		} else if item.Status == 1 {
+			todo = append(todo, item)
+		} else if item.Status == 2 {
+			doing = append(doing, item)
+		} else if item.Status == 3 {
+			done = append(done, item)
+		}
+	}
+
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	} else {
+		response.OkWithData(&resp.ZhihuPlanResponse{
+			Inbox: inbox,
+			Todo:  todo,
+			Doing: doing,
+			Done:  done,
+		}, c)
+	}
+}
+
 func GetTodoList(c *gin.Context) {
 	err, list := service.GetTodoList()
 

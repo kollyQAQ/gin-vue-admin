@@ -26,3 +26,10 @@ func DeleteTodo(todo model.ZhihuTodo) (err error) {
 	err = global.GVA_DB.Delete(todo).Error
 	return err
 }
+
+func GetPlanList() (err error, list []*model.ZhihuPlan) {
+
+	err = global.GVA_DB.Model(&model.ZhihuPlan{}).Find(&list).Error
+
+	return err, list
+}

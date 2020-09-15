@@ -1,7 +1,7 @@
 package model
 
 type ZhihuTodo struct {
-	ID     uint   `gorm:"primary_key"`
+	ID     uint   `gorm:"primary_key" json:"id"`
 	Text   string `json:"text"`
 	Status int    `json:"status"`
 	Done   bool   `json:"done" gorm:"-"`
@@ -10,4 +10,16 @@ type ZhihuTodo struct {
 
 func (ZhihuTodo) TableName() string {
 	return "t_todo"
+}
+
+type ZhihuPlan struct {
+	ID     uint   `gorm:"primary_key" json:"id"`
+	Type   int    `json:"type"`
+	Text   string `json:"name"`
+	Status int    `json:"status"`
+	Remark string `json:"remark"`
+}
+
+func (ZhihuPlan) TableName() string {
+	return "t_plan"
 }

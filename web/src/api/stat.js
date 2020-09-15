@@ -16,6 +16,14 @@ export const queryMusicList = (data) => {
     })
 }
 
+export const queryPlanList = (data) => {
+    return service({
+        url: "/zhihu/queryPlanList",
+        method: 'post',
+        data
+    })
+}
+
 export const queryTodoList = (data) => {
     return service({
         url: "/zhihu/queryTodoList",
