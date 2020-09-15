@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 
@@ -11,7 +12,10 @@ import (
 )
 
 func QueryStat(c *gin.Context) {
-	err1, list := service.QueryQaStat()
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err1, list := service.QueryQaStat(waitUse.ID)
 	if err1 != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err1), c)
 	}
@@ -72,7 +76,10 @@ func GetPlanList(c *gin.Context) {
 }
 
 func GetTodoList(c *gin.Context) {
-	err, list := service.GetTodoList()
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err, list := service.GetTodoList(waitUse.ID)
 
 	for _, item := range list {
 		if item.Status == 1 {
@@ -91,6 +98,10 @@ func AddTodo(c *gin.Context) {
 	var todo model.ZhihuTodo
 	_ = c.ShouldBindJSON(&todo)
 
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+	todo.UserID = waitUse.ID
+
 	err := service.AddTodo(todo)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
@@ -102,6 +113,10 @@ func AddTodo(c *gin.Context) {
 func UpdateTodo(c *gin.Context) {
 	var todo model.ZhihuTodo
 	_ = c.ShouldBindJSON(&todo)
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+	todo.UserID = waitUse.ID
 
 	err := service.UpdateTodo(todo)
 	if err != nil {

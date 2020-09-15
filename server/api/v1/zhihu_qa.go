@@ -21,7 +21,11 @@ func GetQuestionAnswer(c *gin.Context) {
 		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
-	err, list, total := service.GetZhihuQuestionAnswer(sp.ZhihuQuestionAnswer, sp.PageInfo, sp.OrderKey, sp.Desc)
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err, list, total := service.GetZhihuQuestionAnswer(sp.ZhihuQuestionAnswer, sp.PageInfo, sp.OrderKey, sp.Desc, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
@@ -42,6 +46,7 @@ func GetQaById(c *gin.Context) {
 		response.FailWithMessage(IdVerifyErr.Error(), c)
 		return
 	}
+
 	err, qa := service.GetQaById(idInfo.Id)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
@@ -53,6 +58,7 @@ func GetQaById(c *gin.Context) {
 func UpdateQa(c *gin.Context) {
 	var qa model.ZhihuQuestionAnswer
 	_ = c.ShouldBindJSON(&qa)
+
 	ApiVerify := utils.Rules{
 		"SkuID": {utils.NotEmpty()},
 	}
@@ -61,6 +67,7 @@ func UpdateQa(c *gin.Context) {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}
+
 	err := service.UpdateAnswer(qa.Qid, qa.Aid, qa.WithCard)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("修改数据失败，%v", err), c)
@@ -80,6 +87,7 @@ func CreateQa(c *gin.Context) {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}
+
 	err := service.CreateQuestion(question)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
@@ -114,9 +122,6 @@ func QueryHistory(c *gin.Context) {
 	var res [][]interface{}
 	dateList := []interface{}{"date"}
 	viewList := []interface{}{"view"}
-	//res = append(res, []interface{}{"date", "09-01", "09-02", "09-03", "09-04", "09-05", "09-06", "09-07"})
-	//res = append(res, []interface{}{"view", 100, 1100, 1200, 2500, 2000, 400, 200})
-	//response.OkWithData(res, c)
 
 	err, list := service.QueryQuestionHistory(idInfo.Id)
 	for _, history := range list {

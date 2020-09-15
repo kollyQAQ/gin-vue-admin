@@ -15,6 +15,7 @@ func (ZhihuCollection) TableName() string {
 
 type ZhihuCollectionWithContent struct {
 	ID       uint   `gorm:"primary_key"`
+	UserID   uint   `json:"-"`
 	Type     string `json:"type"`
 	Title    string `json:"title"`
 	Url      string `json:"url"`

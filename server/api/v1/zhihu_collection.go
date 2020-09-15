@@ -21,7 +21,11 @@ func GetCollection(c *gin.Context) {
 		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
-	err, list, total := service.GetZhihuCollectionList(sp.ZhihuCollection, sp.PageInfo, sp.OrderKey, sp.Desc)
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err, list, total := service.GetZhihuCollectionList(sp.ZhihuCollection, sp.PageInfo, sp.OrderKey, sp.Desc, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
@@ -72,6 +76,10 @@ func UpdateCollection(c *gin.Context) {
 func CreateCollection(c *gin.Context) {
 	var collection model.ZhihuCollectionWithContent
 	_ = c.ShouldBindJSON(&collection)
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+	collection.UserID = waitUse.ID
 
 	err := service.CreateCollection(collection)
 	if err != nil {

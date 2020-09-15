@@ -2,6 +2,7 @@ package model
 
 type ZhihuGoods struct {
 	ID            uint    `gorm:"primary_key"`
+	UserID        uint    `json:"-"`
 	SkuID         string  `json:"sku_id"`
 	SkuName       string  `json:"sku_name"`
 	Price         float64 `json:"price"`

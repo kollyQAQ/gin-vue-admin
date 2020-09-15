@@ -2,6 +2,7 @@ package model
 
 type ZhihuTodo struct {
 	ID     uint   `gorm:"primary_key" json:"id"`
+	UserID uint   `json:"-"`
 	Text   string `json:"text"`
 	Status int    `json:"status"`
 	Done   bool   `json:"done" gorm:"-"`

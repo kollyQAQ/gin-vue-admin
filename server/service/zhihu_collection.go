@@ -6,11 +6,14 @@ import (
 	"gin-vue-admin/model/request"
 )
 
-func GetZhihuCollectionList(c model.ZhihuCollection, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int) {
+func GetZhihuCollectionList(c model.ZhihuCollection, info request.PageInfo, order string,
+	desc bool, userID uint) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&model.ZhihuCollection{})
 	var collectionList []model.ZhihuCollection
+
+	db = db.Where("user_id = ?", userID)
 
 	if c.Type != "" {
 		db = db.Where("`type` LIKE ?", "%"+c.Type+"%")

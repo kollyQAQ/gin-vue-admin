@@ -8,11 +8,14 @@ import (
 	resp "gin-vue-admin/model/response"
 )
 
-func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int) {
+func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo, order string,
+	desc bool, userID uint) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&model.ZhihuQuestionAnswer{})
 	var qaList []model.ZhihuQuestionAnswer
+
+	db = db.Where("user_id = ?", userID)
 
 	if qa.Qid != "" {
 		db = db.Where("qid LIKE ?", "%"+qa.Qid+"%")
@@ -105,7 +108,7 @@ func QueryQuestionHistory(qid string) (err error, list []model.ZhihuQuestionHist
 	return err, qaList
 }
 
-func QueryQaStat() (err error, list []*model.ZhihuQaStat) {
+func QueryQaStat(userID uint) (err error, list []*model.ZhihuQaStat) {
 	querySql := `
 		SELECT 
 			a.type, a.total, b.answer, c.card_answer
@@ -114,13 +117,14 @@ func QueryQaStat() (err error, list []*model.ZhihuQaStat) {
 				type,
 				count(*) AS total
 			FROM view_question_answer
+			WHERE user_id = ?
 			GROUP BY type
 		) a INNER JOIN (
 			SELECT 
 				type,
 				count(*) AS answer
 			FROM view_question_answer
-			WHERE aid != ''
+			WHERE aid != '' and user_id = ?
 			GROUP BY type
 		) b on a.type = b.type
 		LEFT JOIN (
@@ -128,11 +132,11 @@ func QueryQaStat() (err error, list []*model.ZhihuQaStat) {
 				type,
 				count(*) AS card_answer
 			FROM view_question_answer
-			WHERE aid != '' and with_card = 1
+			WHERE aid != '' and with_card = 1 and user_id = ?
 			GROUP BY type
 		) c on a.type = c.type
 	`
-	err = global.GVA_DB.Raw(querySql).Scan(&list).Error
+	err = global.GVA_DB.Raw(querySql, userID, userID, userID).Scan(&list).Error
 
 	return err, list
 }

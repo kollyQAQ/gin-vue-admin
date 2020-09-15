@@ -8,11 +8,14 @@ import (
 	"time"
 )
 
-func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int) {
+func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order string,
+	desc bool, userID uint) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&model.ZhihuGoods{})
 	var goodsList []model.ZhihuGoods
+
+	db = db.Where("user_id = ?", userID)
 
 	if goods.SkuID != "" {
 		db = db.Where("sku_id LIKE ?", "%"+goods.SkuID+"%")
@@ -74,7 +77,11 @@ func UpdateGoods(goods model.ZhihuGoodsWithContent) (err error) {
 }
 
 func CreateGoods(goods model.ZhihuGoods) (err error) {
-	findOne := global.GVA_DB.Where("sku_id = ?", goods.SkuID).Find(&model.ZhihuGoods{}).Error
+
+	findOne := global.GVA_DB.Where("sku_id = ?", goods.SkuID).
+		Where("user_id = ?", goods.UserID).
+		Find(&model.ZhihuGoods{}).Error
+
 	if findOne == nil {
 		return errors.New("存在相同sku_id")
 	} else {

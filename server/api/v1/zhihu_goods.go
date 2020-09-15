@@ -21,7 +21,11 @@ func GetGoodsList(c *gin.Context) {
 		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
-	err, list, total := service.GetZhihuGoodsList(sp.ZhihuGoods, sp.PageInfo, sp.OrderKey, sp.Desc)
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err, list, total := service.GetZhihuGoodsList(sp.ZhihuGoods, sp.PageInfo, sp.OrderKey, sp.Desc, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
@@ -42,6 +46,7 @@ func GetGoodsById(c *gin.Context) {
 		response.FailWithMessage(IdVerifyErr.Error(), c)
 		return
 	}
+
 	err, goods := service.GetGoodsById(idInfo.Id)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
@@ -61,6 +66,7 @@ func UpdateGoods(c *gin.Context) {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}
+
 	err := service.UpdateGoods(goods)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("修改数据失败，%v", err), c)
@@ -80,6 +86,11 @@ func CreateGoods(c *gin.Context) {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+	goods.UserID = waitUse.ID
+
 	err := service.CreateGoods(goods)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)

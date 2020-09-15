@@ -5,9 +5,9 @@ import (
 	"gin-vue-admin/model"
 )
 
-func GetTodoList() (err error, list []*model.ZhihuTodo) {
+func GetTodoList(userID uint) (err error, list []*model.ZhihuTodo) {
 
-	err = global.GVA_DB.Model(&model.ZhihuTodo{}).Find(&list).Error
+	err = global.GVA_DB.Model(&model.ZhihuTodo{}).Where("user_id = ?", userID).Find(&list).Error
 
 	return err, list
 }
