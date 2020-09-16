@@ -35,8 +35,19 @@ func (ZhihuQuestion) TableName() string {
 	return "t_zhihu_question"
 }
 
+type ZhihuQuestionSub struct {
+	ID     int    `gorm:"primary_key"`
+	UserID uint   `json:"-"`
+	Qid    string `json:"qid"`
+}
+
+func (ZhihuQuestionSub) TableName() string {
+	return "t_zhihu_question_subscribe"
+}
+
 type ZhihuAnswer struct {
 	ID       int    `gorm:"primary_key"`
+	UserID   uint   `json:"-"`
 	Qid      string `json:"qid"`
 	Aid      string `json:"aid"`
 	Rank     string `json:"rank"`

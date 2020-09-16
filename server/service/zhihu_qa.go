@@ -55,27 +55,10 @@ func GetQaById(id string) (err error, qa model.ZhihuQuestionAnswer) {
 	return
 }
 
-func UpdateQuestion(question model.ZhihuQuestion) (err error) {
-	var old model.ZhihuQuestion
-
-	err = global.GVA_DB.Where("qid = ?", question.Qid).First(&old).Error
-
-	if old.Qid != question.Qid {
-		flag := global.GVA_DB.Where("qid = ?", question.Qid).Find(&model.ZhihuQuestion{}).RecordNotFound()
-		if !flag {
-			return errors.New("存在相同qid")
-		}
-	}
-
-	err = global.GVA_DB.Save(&question).Error
-
-	return err
-}
-
-func UpdateAnswer(qid, aid, with_card string) (err error) {
-	find := model.ZhihuAnswer{Qid: qid}
-	update := model.ZhihuAnswer{Aid: aid, WithCard: with_card}
-	insert := model.ZhihuAnswer{Qid: qid, Aid: aid, WithCard: with_card}
+func UpdateAnswer(qid, aid, withCard string, userID uint) (err error) {
+	find := model.ZhihuAnswer{Qid: qid, UserID: userID}
+	update := model.ZhihuAnswer{Aid: aid, WithCard: withCard}
+	insert := model.ZhihuAnswer{Qid: qid, UserID: userID, Aid: aid, WithCard: withCard}
 
 	//	Where("qid = ?", answer.Qid).Update("aid", answer.Aid)
 	//global.GVA_DB.Model(&model.ZhihuAnswer{}).
@@ -84,18 +67,33 @@ func UpdateAnswer(qid, aid, with_card string) (err error) {
 
 }
 
-func CreateQuestion(question model.ZhihuQuestion) (err error) {
+func CreateQuestion(question model.ZhihuQuestion, userID uint) (err error) {
 	findOne := global.GVA_DB.Where("qid = ?", question.Qid).Find(&model.ZhihuQuestion{}).Error
-	if findOne == nil {
-		return errors.New("存在相同qid")
-	} else {
+	if findOne != nil {
 		err = global.GVA_DB.Create(&question).Error
 	}
+
+	sub := &model.ZhihuQuestionSub{
+		UserID: userID,
+		Qid:    question.Qid,
+	}
+
+	findOne = global.GVA_DB.Where("user_id = ?", sub.UserID).
+		Where("qid = ?", sub.Qid).
+		Find(&model.ZhihuQuestionSub{}).Error
+
+	if findOne == nil {
+		return errors.New("该问题已经被你添加过了")
+	} else {
+		err = global.GVA_DB.Create(&sub).Error
+	}
+
 	return err
 }
 
-func DeleteQuestion(question model.ZhihuQuestion) (err error) {
+func DeleteQuestion(question model.ZhihuQuestionSub) (err error) {
 	err = global.GVA_DB.Delete(question).Error
+	// TODO：如果这个问题没有其他人关注，应该把问题本身也删掉
 	return err
 }
 
@@ -141,7 +139,7 @@ func QueryQaStat(userID uint) (err error, list []*model.ZhihuQaStat) {
 	return err, list
 }
 
-func QueryStat() (err error, data resp.ZhihuStat) {
+func QueryStat(userID uint) (err error, data resp.ZhihuStat) {
 	querySql := `
 		SELECT 
 			a.no_fee_goods_num,
@@ -149,19 +147,19 @@ func QueryStat() (err error, data resp.ZhihuStat) {
 			c.todo_number,
 			d.today_view
 		FROM (
-			SELECT '1' as id, COUNT(*) as no_fee_goods_num FROM t_zhihu_goods where fee_rate = 0
+			SELECT '1' as id, COUNT(*) as no_fee_goods_num FROM t_zhihu_goods where fee_rate = 0 and user_id = ?
 		) a
 		LEFT JOIN (
-			SELECT '1' as id, ROUND(SUM(fee)) as today_fee FROM t_zhihu_order where to_days(order_time) = to_days(now())
+			SELECT '1' as id, ifnull(ROUND(SUM(fee)),0) as today_fee FROM t_zhihu_order where to_days(order_time) = to_days(now()) and user_id = ?
 		) b ON a.id = b.id
 		LEFT JOIN (
-			SELECT '1' as id, COUNT(*) as todo_number FROM t_todo where status = 0
+			SELECT '1' as id, COUNT(*) as todo_number FROM t_todo where status = 0 and user_id = ?
 		) c ON a.id = c.id
 		LEFT JOIN (
-			SELECT '1' as id, SUM(today_add_view) as today_view FROM view_question_answer
+			SELECT '1' as id, ifnull(SUM(today_add_view),0) as today_view FROM view_question_answer where user_id = ?
 		) d ON a.id = d.id
 	`
-	err = global.GVA_DB.Raw(querySql).Scan(&data).Error
+	err = global.GVA_DB.Raw(querySql, userID, userID, userID, userID).Scan(&data).Error
 
 	return err, data
 }

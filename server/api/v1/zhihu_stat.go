@@ -20,7 +20,7 @@ func QueryStat(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err1), c)
 	}
 
-	err2, data := service.QueryStat()
+	err2, data := service.QueryStat(waitUse.ID)
 	if err2 != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err2), c)
 	}

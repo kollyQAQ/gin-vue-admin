@@ -68,7 +68,10 @@ func UpdateQa(c *gin.Context) {
 		return
 	}
 
-	err := service.UpdateAnswer(qa.Qid, qa.Aid, qa.WithCard)
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err := service.UpdateAnswer(qa.Qid, qa.Aid, qa.WithCard, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("修改数据失败，%v", err), c)
 	} else {
@@ -88,7 +91,10 @@ func CreateQa(c *gin.Context) {
 		return
 	}
 
-	err := service.CreateQuestion(question)
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err := service.CreateQuestion(question, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 	} else {
@@ -97,16 +103,13 @@ func CreateQa(c *gin.Context) {
 }
 
 func DeleteQa(c *gin.Context) {
-	var a model.ZhihuQuestion
+	var a model.ZhihuQuestionSub
 	_ = c.ShouldBindJSON(&a)
-	//ApiVerify := utils.Rules{
-	//	"ID": {utils.NotEmpty()},
-	//}
-	//ApiVerifyErr := utils.Verify(a.Model, ApiVerify)
-	//if ApiVerifyErr != nil {
-	//	response.FailWithMessage(ApiVerifyErr.Error(), c)
-	//	return
-	//}
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+	a.UserID = waitUse.ID
+
 	err := service.DeleteQuestion(a)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)

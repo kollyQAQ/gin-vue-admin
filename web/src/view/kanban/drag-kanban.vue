@@ -55,7 +55,7 @@
 </script>
 <style lang="scss">
 .board {
-  width: 1200px;
+  width: 1100px;
   margin-left: 20px;
   display: flex;
   justify-content: space-around;

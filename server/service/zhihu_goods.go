@@ -67,7 +67,7 @@ func UpdateGoods(goods model.ZhihuGoodsWithContent) (err error) {
 	if oldGoods.SkuID != goods.SkuID {
 		flag := global.GVA_DB.Where("sku_id = ?", goods.SkuID).Find(&model.ZhihuGoodsWithContent{}).RecordNotFound()
 		if !flag {
-			return errors.New("存在相同sku_id")
+			return errors.New("该商品已经存在")
 		}
 	}
 
@@ -83,7 +83,7 @@ func CreateGoods(goods model.ZhihuGoods) (err error) {
 		Find(&model.ZhihuGoods{}).Error
 
 	if findOne == nil {
-		return errors.New("存在相同sku_id")
+		return errors.New("该商品已经被你添加过了")
 	} else {
 		goods.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
 		err = global.GVA_DB.Create(&goods).Error
