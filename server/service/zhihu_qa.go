@@ -166,6 +166,7 @@ func QueryStat(userID uint) (err error, data resp.ZhihuStat) {
 
 func GetQuestionTypeMap() map[int]string {
 	return map[int]string{
+		0: "未分类",
 		1: "礼物",
 		2: "乳胶枕",
 		3: "按摩仪",

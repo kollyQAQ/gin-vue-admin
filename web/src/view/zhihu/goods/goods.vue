@@ -8,19 +8,19 @@
         <el-form-item label="商品名">
           <el-input placeholder="商品名" v-model="searchInfo.sku_name"></el-input>
         </el-form-item>
-        <el-form-item label="佣金比(小于)">
-          <el-input type='number' placeholder="佣金比" v-model.number="searchInfo.fee_rate"></el-input>
-        </el-form-item>
-        <el-form-item label="品类">
-          <el-select clearable placeholder="请选择" v-model="searchInfo.third_category">
-            <el-option
-              :key="item.value"
-              :label="`${item.label}`"
-              :value="item.value"
-              v-for="item in methodOptions"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="佣金比(小于)">-->
+<!--          <el-input type='number' placeholder="佣金比" v-model.number="searchInfo.fee_rate"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="品类">-->
+<!--          <el-select clearable placeholder="请选择" v-model="searchInfo.third_category">-->
+<!--            <el-option-->
+<!--              :key="item.value"-->
+<!--              :label="`${item.label}`"-->
+<!--              :value="item.value"-->
+<!--              v-for="item in methodOptions"-->
+<!--            ></el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>

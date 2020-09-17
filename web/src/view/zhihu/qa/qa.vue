@@ -8,16 +8,16 @@
         <el-form-item label="问题名称">
           <el-input placeholder="问题名称" v-model="searchInfo.qname"></el-input>
         </el-form-item>
-        <el-form-item label="品类">
-          <el-select clearable placeholder="请选择" v-model="searchInfo.type">
-            <el-option
-              :key="item.value"
-              :label="`${item.label}`"
-              :value="item.value"
-              v-for="item in typesOptions"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="品类">-->
+<!--          <el-select clearable placeholder="请选择" v-model="searchInfo.type">-->
+<!--            <el-option-->
+<!--              :key="item.value"-->
+<!--              :label="`${item.label}`"-->
+<!--              :value="item.value"-->
+<!--              v-for="item in typesOptions"-->
+<!--            ></el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -94,16 +94,16 @@
         <el-form-item label="问题名称" prop="qname">
           <el-input autocomplete="off" v-model="form.qname"></el-input>
         </el-form-item>
-        <el-form-item label="问题分类" prop="with_card">
-          <el-select placeholder="请选择" v-model="form.type">
-            <el-option
-                    :key="item.value"
-                    :label="`${item.label}`"
-                    :value="item.value"
-                    v-for="item in typesOptions"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="问题分类" prop="with_card">-->
+<!--          <el-select placeholder="请选择" v-model="form.type">-->
+<!--            <el-option-->
+<!--                    :key="item.value"-->
+<!--                    :label="`${item.label}`"-->
+<!--                    :value="item.value"-->
+<!--                    v-for="item in typesOptions"-->
+<!--            ></el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="回答ID" prop="aid">
           <el-input autocomplete="off" v-model="form.aid"></el-input>
         </el-form-item>
