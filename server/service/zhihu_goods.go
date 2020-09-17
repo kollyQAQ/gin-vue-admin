@@ -57,7 +57,7 @@ func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order stri
 }
 
 func GetGoodsById(id float64) (err error, goods model.ZhihuGoodsWithContent) {
-	err = global.GVA_DB.Where("id = ?", id).First(&goods).Error
+	err = global.GVA_DB.Debug().Where("id = ?", id).First(&goods).Error
 	return
 }
 
