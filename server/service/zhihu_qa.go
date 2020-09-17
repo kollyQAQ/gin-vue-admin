@@ -93,7 +93,7 @@ func CreateQuestion(question model.ZhihuQuestion, userID uint) (err error) {
 
 func DeleteQuestion(question model.ZhihuQuestionSub) (err error) {
 	err = global.GVA_DB.Delete(question).Error
-	// TODO：如果这个问题没有其他人关注，应该把问题本身也删掉
+	// TODO：如果这个问题没有其他人关注，应该把问题本身也删掉, 问题的回答也删掉
 	return err
 }
 

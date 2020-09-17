@@ -9,3 +9,11 @@ type SearchQaParams struct {
 	OrderKey string `json:"orderKey"`
 	Desc     bool   `json:"desc"`
 }
+
+type CreateQaParams struct {
+	Qid      string `json:"qid"`
+	Qname    string `json:"qname"`
+	Aid      string `json:"aid"`
+	Type     int    `json:"type"`
+	WithCard string `json:"with_card"`
+}

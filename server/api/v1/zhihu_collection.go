@@ -65,6 +65,11 @@ func UpdateCollection(c *gin.Context) {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+	collection.UserID = waitUse.ID
+
 	err := service.UpdateCollection(collection)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("修改数据失败，%v", err), c)

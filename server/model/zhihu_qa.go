@@ -2,6 +2,7 @@ package model
 
 type ZhihuQuestionAnswer struct {
 	ID              int    `gorm:"primary_key"`
+	SubId           int    `json:"sub_id"`
 	Qid             string `json:"qid"`
 	Type            int    `json:"type"`
 	Qname           string `json:"qname"`
@@ -36,7 +37,7 @@ func (ZhihuQuestion) TableName() string {
 }
 
 type ZhihuQuestionSub struct {
-	ID     int    `gorm:"primary_key"`
+	ID     int    `gorm:"primary_key" json:"sub_id"`
 	UserID uint   `json:"-"`
 	Qid    string `json:"qid"`
 }

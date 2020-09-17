@@ -80,12 +80,13 @@ func UpdateQa(c *gin.Context) {
 }
 
 func CreateQa(c *gin.Context) {
-	var question model.ZhihuQuestion
-	_ = c.ShouldBindJSON(&question)
+	var param request.CreateQaParams
+	_ = c.ShouldBindJSON(&param)
+
 	ApiVerify := utils.Rules{
 		"Qid": {utils.NotEmpty()},
 	}
-	ApiVerifyErr := utils.Verify(question, ApiVerify)
+	ApiVerifyErr := utils.Verify(param, ApiVerify)
 	if ApiVerifyErr != nil {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
@@ -94,12 +95,25 @@ func CreateQa(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	waitUse := claims.(*request.CustomClaims)
 
+	question := model.ZhihuQuestion{
+		Qid:   param.Qid,
+		Title: param.Qname,
+		Type:  param.Type,
+	}
+
 	err := service.CreateQuestion(question, waitUse.ID)
 	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
-	} else {
-		response.OkWithMessage("创建成功", c)
+		response.FailWithMessage(fmt.Sprintf("创建问题失败，%v", err), c)
 	}
+
+	if param.Aid != "" {
+		err = service.UpdateAnswer(param.Qid, param.Aid, param.WithCard, waitUse.ID)
+		if err != nil {
+			response.FailWithMessage(fmt.Sprintf("创建回答失败，%v", err), c)
+		}
+	}
+
+	response.OkWithMessage("创建问答成功", c)
 }
 
 func DeleteQa(c *gin.Context) {
