@@ -42,9 +42,9 @@ func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo,
 			} else {
 				OrderStr = order
 			}
-			err = db.Order(OrderStr, true).Find(&qaList).Error
+			err = db.Debug().Order(OrderStr, true).Find(&qaList).Error
 		} else {
-			err = db.Order("today_add_view desc", true).Find(&qaList).Error
+			err = db.Debug().Order("today_add_view desc", true).Find(&qaList).Error
 		}
 	}
 	return err, qaList, total
@@ -159,7 +159,7 @@ func QueryStat(userID uint) (err error, data resp.ZhihuStat) {
 			SELECT '1' as id, ifnull(SUM(today_add_view),0) as today_view FROM view_question_answer where user_id = ?
 		) d ON a.id = d.id
 	`
-	err = global.GVA_DB.Raw(querySql, userID, userID, userID, userID).Scan(&data).Error
+	err = global.GVA_DB.Debug().Raw(querySql, userID, userID, userID, userID).Scan(&data).Error
 
 	return err, data
 }

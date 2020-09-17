@@ -46,9 +46,11 @@ func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order stri
 			} else {
 				OrderStr = order
 			}
-			err = db.Debug().Order(OrderStr, true).Find(&goodsList).Error
+			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, jd_sale, cid3_name").
+				Order(OrderStr, true).Find(&goodsList).Error
 		} else {
-			err = db.Debug().Order("fee_rate desc", true).Find(&goodsList).Error
+			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, jd_sale, cid3_name").
+				Order("fee_rate desc", true).Find(&goodsList).Error
 		}
 	}
 	return err, goodsList, total

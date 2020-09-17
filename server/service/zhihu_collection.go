@@ -32,9 +32,9 @@ func GetZhihuCollectionList(c model.ZhihuCollection, info request.PageInfo, orde
 			} else {
 				OrderStr = order
 			}
-			err = db.Order(OrderStr, true).Find(&collectionList).Error
+			err = db.Debug().Select("id, type, title, author ,url , priority").Order(OrderStr, true).Find(&collectionList).Error
 		} else {
-			err = db.Order("priority desc, type", true).Find(&collectionList).Error
+			err = db.Debug().Select("id, type, title, author ,url , priority").Order("priority desc, type", true).Find(&collectionList).Error
 		}
 	}
 	return err, collectionList, total
