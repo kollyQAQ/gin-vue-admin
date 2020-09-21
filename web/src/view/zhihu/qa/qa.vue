@@ -8,16 +8,16 @@
         <el-form-item label="问题名称">
           <el-input placeholder="问题名称" v-model="searchInfo.qname"></el-input>
         </el-form-item>
-<!--        <el-form-item label="品类">-->
-<!--          <el-select clearable placeholder="请选择" v-model="searchInfo.type">-->
-<!--            <el-option-->
-<!--              :key="item.value"-->
-<!--              :label="`${item.label}`"-->
-<!--              :value="item.value"-->
-<!--              v-for="item in typesOptions"-->
-<!--            ></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+        <el-form-item label="品类">
+          <el-select clearable placeholder="请选择" v-model="searchInfo.type">
+            <el-option
+              :key="item.value"
+              :label="`${item.label}`"
+              :value="item.value"
+              v-for="item in typesOptions"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -28,7 +28,7 @@
     </div>
     <el-table :data="tableData" @sort-change="sortChange" border stripe>
       <el-table-column label="ID" min-width="50" prop="ID" sortable="custom"></el-table-column>
-      <el-table-column label="问题ID" min-width="80" sortable="custom">
+      <el-table-column label="问题ID" min-width="80" prop="qid" sortable="custom">
         <template slot-scope="scope">
           <a :href="'https://www.zhihu.com/question/' + scope.row.qid" target="_blank" style="color:#606266">
             {{scope.row.qid}}
@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column label="问题名称" min-width="180" prop="qname" sortable="custom"></el-table-column>
       <el-table-column label="总浏览" min-width="80" prop="view_total" sortable="custom"></el-table-column>
-      <el-table-column label="回答数" min-width="80" sortable="custom">
+      <el-table-column label="回答数" min-width="80" prop="answer_total" sortable="custom">
         <template slot-scope="scope">
           <p v-if="scope.row.answer_total>400" style="font-size:16px;color:green">{{scope.row.answer_total}}</p>
           <p v-else>{{scope.row.answer_total}}</p>
@@ -45,21 +45,21 @@
       </el-table-column>
       <el-table-column label="今日浏览" min-width="80" prop="today_add_view" sortable="custom"></el-table-column>
       <el-table-column label="三日浏览" min-width="80" prop="three_day_add_view" sortable="custom"></el-table-column>
-      <el-table-column label="回答ID" min-width="80" sortable="custom">
+      <el-table-column label="回答ID" min-width="80" prop="aid" sortable="custom">
         <template slot-scope="scope">
           <a :href="'https://www.zhihu.com/question/' + scope.row.qid + '/answer/' + scope.row.aid" target="_blank" style="color:#606266">
             {{scope.row.aid}}
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="排名" min-width="60" sortable="custom">
+      <el-table-column label="排名" min-width="60" prop="rank" sortable="custom">
         <template slot-scope="scope">
           <p v-if="scope.row.rank<10" style="font-size:16px;color:red">{{scope.row.rank}}</p>
           <p v-else>{{scope.row.rank}}</p>
         </template>
       </el-table-column>
       <el-table-column label="点赞" min-width="60" prop="like_num" sortable="custom"></el-table-column>
-      <el-table-column label="带货" min-width="60" sortable="custom">
+      <el-table-column label="带货" min-width="60" prop="with_card" sortable="custom">
         <template slot-scope="scope">
           <p v-if="scope.row.with_card == 1">
             <i class="el-icon-success" style="font-size:20px;color: green"></i>
@@ -94,16 +94,16 @@
         <el-form-item label="问题名称" prop="qname">
           <el-input autocomplete="off" v-model="form.qname"></el-input>
         </el-form-item>
-<!--        <el-form-item label="问题分类" prop="with_card">-->
-<!--          <el-select placeholder="请选择" v-model="form.type">-->
-<!--            <el-option-->
-<!--                    :key="item.value"-->
-<!--                    :label="`${item.label}`"-->
-<!--                    :value="item.value"-->
-<!--                    v-for="item in typesOptions"-->
-<!--            ></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+        <el-form-item label="问题分类" prop="with_card">
+          <el-select placeholder="请选择" v-model="form.type">
+            <el-option
+                    :key="item.value"
+                    :label="`${item.label}`"
+                    :value="item.value"
+                    v-for="item in typesOptions"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="回答ID" prop="aid">
           <el-input autocomplete="off" v-model="form.aid"></el-input>
         </el-form-item>
@@ -150,39 +150,15 @@ import {
   queryQaHistory,
 } from '@/api/qa'
 
+import {
+  queryTypeList,
+} from '@/api/stat'
+
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
-
-const typesOptions = [
-  {
-    value: 1,
-    label: '礼物',
-    type: ''
-  },
-  {
-    value: 2,
-    label: '乳胶枕',
-    type: ''
-  },
-  {
-    value: 3,
-    label: '按摩仪',
-    type: ''
-  },
-  {
-    value: 5,
-    label: '生日礼物',
-    type: ''
-  },
-  {
-    value: 4,
-    label: '教师节礼物',
-    type: ''
-  }
-]
 
 const methodOptions = [
   {
@@ -195,7 +171,7 @@ const methodOptions = [
     label: '带货',
     type: ''
   }
-]
+];
 
 export default {
   name: 'Qa',
@@ -215,7 +191,7 @@ export default {
       },
       historyData: {},
       methodOptions: methodOptions,
-      typesOptions: typesOptions,
+      typesOptions: [],
       type: '',
       rules: {
         qid: [{ required: true, message: '请输入问题ID', trigger: 'blur' }],
@@ -281,11 +257,6 @@ export default {
       this.dialogHisVisible = true
       const res = await queryQaHistory({ id: row.qid })
       this.historyData = res.data
-      // this.historyData = [
-      //   ['date', '09-01', '09-02', '09-03', '09-04', '09-05', '09-06', '09-07'],
-      //   ['view', 1000, 1100, 1200, 2500, 2000, 1400, 2000],
-      //   ['rank', 1, 2, 3, 4, 5, 6, 7]
-      // ]
       this.openDialog('history')
     },
     async editQa(row) {
@@ -421,7 +392,10 @@ export default {
   created(){
     this.getTableData()
   },
-  mounted(){}
+  async mounted(){
+    const res = await queryTypeList()
+    this.typesOptions = res.data
+  }
 }
 </script>
 <style scoped lang="scss">

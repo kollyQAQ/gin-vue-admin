@@ -109,13 +109,15 @@ func QueryQuestionHistory(qid string) (err error, list []model.ZhihuQuestionHist
 func QueryQaStat(userID uint) (err error, list []*model.ZhihuQaStat) {
 	querySql := `
 		SELECT 
-			a.type, a.total, b.answer, c.card_answer
+			a.type, a.type_desc, a.total, b.answer, c.card_answer
 		FROM (
 			SELECT 
 				type,
+				IFNULL(typ.label, '未分类') as type_desc,
 				count(*) AS total
-			FROM view_question_answer
-			WHERE user_id = ?
+			FROM view_question_answer ans
+			LEFT JOIN t_zhihu_type typ ON ans.type = typ.id
+			WHERE ans.user_id = ?
 			GROUP BY type
 		) a INNER JOIN (
 			SELECT 

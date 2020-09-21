@@ -55,3 +55,11 @@ export const deleteTodo = (data) => {
         data
     })
 }
+
+export const queryTypeList = (data) => {
+    return service({
+        url: "/zhihu/queryTypeList",
+        method: 'post',
+        data
+    })
+}

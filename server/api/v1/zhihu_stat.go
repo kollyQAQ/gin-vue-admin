@@ -137,3 +137,23 @@ func DeleteTodo(c *gin.Context) {
 		response.OkWithMessage("删除成功", c)
 	}
 }
+
+func GetTypeList(c *gin.Context) {
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	result := make([]*model.ZhihuType, 0)
+	result = append(result, &model.ZhihuType{
+		ID:     0,
+		UserID: waitUse.ID,
+		Label:  "未分类",
+	})
+
+	err, list := service.GetTypeList(waitUse.ID)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	} else {
+		list = append(result, list...)
+		response.OkWithData(list, c)
+	}
+}

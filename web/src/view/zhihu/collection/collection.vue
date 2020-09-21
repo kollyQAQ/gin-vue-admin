@@ -22,7 +22,7 @@
     </div>
     <el-table :data="tableData" @sort-change="sortChange" border stripe>
       <el-table-column label="类型" min-width="50" prop="type" sortable="custom"></el-table-column>
-      <el-table-column label="内容" min-width="200" sortable="custom">
+      <el-table-column label="内容" min-width="200" prop="title" sortable="custom">
         <template slot-scope="scope">
           <a :href=scope.row.url target="_blank" style="color:#606266">
             {{scope.row.title}}
@@ -144,7 +144,7 @@ export default {
         title: '',
         url: '',
         author: '',
-        priority: 0,
+        priority: '0',
         remark: ''
       },
       methodOptions: methodOptions,

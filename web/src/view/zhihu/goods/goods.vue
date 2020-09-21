@@ -31,14 +31,14 @@
     </div>
     <el-table :data="tableData" @sort-change="sortChange" border stripe>
       <el-table-column label="id" min-width="50" prop="ID" sortable="custom"></el-table-column>
-      <el-table-column label="sku" min-width="80" sortable="custom">
+      <el-table-column label="sku" min-width="80" prop="sku_id" sortable="custom">
         <template slot-scope="scope">
           <a :href="'http://item.jd.com/' + scope.row.sku_id + '.html'" target="_blank" style="color:#606266">
             {{scope.row.sku_id}}
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="商品名" min-width="200" sortable="custom">
+      <el-table-column label="商品名" min-width="200" prop="sku_name" sortable="custom">
         <template slot-scope="scope">
           <a :href="'https://union.jd.com/proManager/index?pageNo=1&keywords=' + scope.row.sku_id" target="_blank" style="color:#606266">
             {{scope.row.sku_name}}
@@ -46,7 +46,7 @@
         </template>
       </el-table-column>
       <el-table-column label="价格" min-width="50" prop="price" sortable="custom"></el-table-column>
-      <el-table-column label="佣金比" min-width="50" sortable="custom">
+      <el-table-column label="佣金比" min-width="50" prop="fee_rate" sortable="custom">
         <template slot-scope="scope">
           <p v-if="scope.row.fee_rate>=20" style="font-size:16px;color:red">{{scope.row.fee_rate}}</p>
           <p v-else-if="scope.row.fee_rate>=10" style="font-size:16px;color:orange">{{scope.row.fee_rate}}</p>

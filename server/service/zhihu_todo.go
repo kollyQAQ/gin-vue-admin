@@ -33,3 +33,10 @@ func GetPlanList() (err error, list []*model.ZhihuPlan) {
 
 	return err, list
 }
+
+func GetTypeList(userID uint) (err error, list []*model.ZhihuType) {
+
+	err = global.GVA_DB.Model(&model.ZhihuType{}).Where("user_id = ?", userID).Find(&list).Error
+
+	return err, list
+}

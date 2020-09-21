@@ -35,6 +35,8 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 
 		ApiRouter.POST("queryPlanList", v1.GetPlanList) // 查询TODO列表
 
+		ApiRouter.POST("queryTypeList", v1.GetTypeList) // 查询 type 列表
+
 		ApiRouter.POST("queryTodoList", v1.GetTodoList) // 查询TODO列表
 		ApiRouter.POST("addTodo", v1.AddTodo)           // 添加TODO
 		ApiRouter.POST("updateTodo", v1.UpdateTodo)     // 更新TODO

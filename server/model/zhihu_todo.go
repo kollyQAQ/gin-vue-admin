@@ -24,3 +24,13 @@ type ZhihuPlan struct {
 func (ZhihuPlan) TableName() string {
 	return "t_plan"
 }
+
+type ZhihuType struct {
+	ID     uint   `gorm:"primary_key" json:"value"`
+	UserID uint   `json:"-"`
+	Label  string `json:"label"`
+}
+
+func (ZhihuType) TableName() string {
+	return "t_zhihu_type"
+}
