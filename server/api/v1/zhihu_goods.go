@@ -27,14 +27,32 @@ func GetGoodsList(c *gin.Context) {
 
 	err, list, total := service.GetZhihuGoodsList(sp.ZhihuGoods, sp.PageInfo, sp.OrderKey, sp.Desc, waitUse.ID)
 	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取商品数据失败，%v", err), c)
 	} else {
-		response.OkWithData(resp.PageResult{
-			List:     list,
-			Total:    total,
-			Page:     sp.PageInfo.Page,
-			PageSize: sp.PageInfo.PageSize,
-		}, c)
+		err, category := service.GetZhihuGoodsCategoryList(waitUse.ID)
+		if err != nil {
+			response.FailWithMessage(fmt.Sprintf("获取类目数据失败，%v", err), c)
+		} else {
+			response.OkWithData(resp.PageResult{
+				List:     list,
+				Category: category,
+				Total:    total,
+				Page:     sp.PageInfo.Page,
+				PageSize: sp.PageInfo.PageSize,
+			}, c)
+		}
+	}
+}
+
+func GetGoodsCategory(c *gin.Context) {
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err, category := service.GetZhihuGoodsCategoryList(waitUse.ID)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取类目数据失败，%v", err), c)
+	} else {
+		response.OkWithData(category, c)
 	}
 }
 

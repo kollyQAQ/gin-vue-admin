@@ -11,16 +11,16 @@
 <!--        <el-form-item label="佣金比(小于)">-->
 <!--          <el-input type='number' placeholder="佣金比" v-model.number="searchInfo.fee_rate"></el-input>-->
 <!--        </el-form-item>-->
-<!--        <el-form-item label="品类">-->
-<!--          <el-select clearable placeholder="请选择" v-model="searchInfo.third_category">-->
-<!--            <el-option-->
-<!--              :key="item.value"-->
-<!--              :label="`${item.label}`"-->
-<!--              :value="item.value"-->
-<!--              v-for="item in methodOptions"-->
-<!--            ></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+        <el-form-item label="品类">
+          <el-select clearable placeholder="请选择" v-model="searchInfo.third_category">
+            <el-option
+              :key="item.value"
+              :label="`${item.label}`"
+              :value="item.value"
+              v-for="item in methodOptions"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -54,8 +54,16 @@
         </template>
       </el-table-column>
       <el-table-column label="佣金" min-width="50" prop="fee" sortable="custom"></el-table-column>
+      <el-table-column label="订单量" min-width="50" prop="order_num" sortable="custom"></el-table-column>
       <el-table-column label="品类" min-width="50" prop="third_category" sortable="custom"></el-table-column>
-      <el-table-column label="是否自营" min-width="50" prop="jd_sale" sortable="custom"></el-table-column>
+      <el-table-column label="是否自营" min-width="50" prop="jd_sale" sortable="custom">
+        <template slot-scope="scope">
+          <p v-if="scope.row.jd_sale == 1">
+            <i class="el-icon-success" style="font-size:20px;color: green"></i>
+          </p>
+          <p v-if="scope.row.jd_sale == 0"><i class="el-icon-error"></i></p>
+        </template>
+      </el-table-column>
 
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
@@ -105,6 +113,7 @@
 
 import {
   getGoodsList,
+  getGoodsCategory,
   getGoodsById,
   updateGoods,
   createGoods,
@@ -114,28 +123,6 @@ import {
 
 import infoList from '@/components/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
-const methodOptions = [
-  {
-    value: '乳胶枕',
-    label: '乳胶枕',
-    type: ''
-  },
-  {
-    value: '按摩器',
-    label: '按摩器',
-    type: ''
-  },
-  {
-    value: '按摩椅',
-    label: '按摩椅',
-    type: ''
-  },
-  {
-    value: '床垫',
-    label: '床垫',
-    type: ''
-  }
-]
 
 export default {
   name: 'Goods',
@@ -150,7 +137,7 @@ export default {
         sku_name: '',
         content: ''
       },
-      methodOptions: methodOptions,
+      methodOptions: [],
       type: '',
       rules: {
         sku_id: [{ required: true, message: '请输入sku_id', trigger: 'blur' }],
@@ -275,19 +262,21 @@ export default {
       })
     }
   },
-  filters: {
-    methodFiletr(value) {
-      const target = methodOptions.filter(item => item.value === value)[0]
-      // return target && `${target.label}(${target.value})`
-      return target && `${target.label}`
-    },
-    tagTypeFiletr(value) {
-      const target = methodOptions.filter(item => item.value === value)[0]
-      return target && `${target.type}`
-    }
-  },
-  created(){
+  // filters: {
+  //   methodFiletr(value) {
+  //     const target = methodOptions.filter(item => item.value === value)[0]
+  //     // return target && `${target.label}(${target.value})`
+  //     return target && `${target.label}`
+  //   },
+  //   tagTypeFiletr(value) {
+  //     const target = methodOptions.filter(item => item.value === value)[0]
+  //     return target && `${target.type}`
+  //   }
+  // },
+  async created(){
     this.getTableData()
+    const res = await getGoodsCategory()
+    this.methodOptions = res.data
   }
 }
 </script>

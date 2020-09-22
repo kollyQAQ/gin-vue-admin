@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/response"
 	"time"
 )
 
@@ -46,14 +47,27 @@ func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order stri
 			} else {
 				OrderStr = order
 			}
-			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, jd_sale, cid3_name").
+			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, order_num, jd_sale, cid3_name").
 				Order(OrderStr, true).Find(&goodsList).Error
 		} else {
-			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, jd_sale, cid3_name").
+			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, order_num, jd_sale, cid3_name").
 				Order("fee_rate desc", true).Find(&goodsList).Error
 		}
 	}
 	return err, goodsList, total
+}
+
+func GetZhihuGoodsCategoryList(userID uint) (err error, list []*response.Category) {
+	querySql := `
+		SELECT cid3_name as label, cid3_name as value
+		FROM t_zhihu_goods
+		WHERE user_id = ? AND cid3_name IS NOT NULL AND cid3_name != ''
+		GROUP BY cid3_name
+		ORDER BY COUNT(*) DESC;
+	`
+	err = global.GVA_DB.Raw(querySql, userID).Scan(&list).Error
+
+	return err, list
 }
 
 func GetGoodsById(id float64) (err error, goods model.ZhihuGoodsWithContent) {

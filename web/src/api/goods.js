@@ -8,6 +8,14 @@ export const getGoodsList = (data) => {
     })
 }
 
+export const getGoodsCategory = (data) => {
+    return service({
+        url: "/zhihu/getGoodsCategory",
+        method: 'post',
+        data
+    })
+}
+
 export const getGoodsById = (data) => {
     return service({
         url: "/zhihu/getGoodsById",

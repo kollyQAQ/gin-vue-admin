@@ -10,11 +10,12 @@ import (
 func InitZhihuRouter(Router *gin.RouterGroup) {
 	ApiRouter := Router.Group("zhihu").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
-		ApiRouter.POST("getGoodsList", v1.GetGoodsList) // 获取商品列表
-		ApiRouter.POST("getGoodsById", v1.GetGoodsById) // 获取单个商品信息
-		ApiRouter.POST("createGoods", v1.CreateGoods)   // 创建新商品
-		ApiRouter.POST("updateGoods", v1.UpdateGoods)   // 修改商品信息
-		ApiRouter.POST("deleteGoods", v1.DeleteGoods)   // 删除商品
+		ApiRouter.POST("getGoodsList", v1.GetGoodsList)         // 获取商品列表
+		ApiRouter.POST("getGoodsCategory", v1.GetGoodsCategory) // 获取商品类目
+		ApiRouter.POST("getGoodsById", v1.GetGoodsById)         // 获取单个商品信息
+		ApiRouter.POST("createGoods", v1.CreateGoods)           // 创建新商品
+		ApiRouter.POST("updateGoods", v1.UpdateGoods)           // 修改商品信息
+		ApiRouter.POST("deleteGoods", v1.DeleteGoods)           // 删除商品
 
 		ApiRouter.POST("getQaList", v1.GetQuestionAnswer) // 获取问答列表
 		ApiRouter.POST("getQaById", v1.GetQaById)         // 获取单个问答信息

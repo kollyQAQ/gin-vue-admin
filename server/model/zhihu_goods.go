@@ -10,6 +10,7 @@ type ZhihuGoods struct {
 	Fee           float64 `json:"fee"`
 	JdSale        uint    `json:"jd_sale"`
 	ThirdCategory string  `json:"third_category" gorm:"column:cid3_name"`
+	OrderNum      uint    `json:"order_num"`
 	UpdateTime    string  `json:"update_time"`
 }
 
