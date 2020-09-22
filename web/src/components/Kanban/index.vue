@@ -42,6 +42,9 @@
         }
       }
     },
+    updated() {
+      console.log(this.list)
+    },
     methods: {
       setData(dataTransfer) {
         // to avoid Firefox bug

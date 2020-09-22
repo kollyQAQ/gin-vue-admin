@@ -13,35 +13,17 @@
   } from '@/api/stat'
 
   export default {
-    name: 'DragKanbanDemo',
+    name: 'DragKanban',
     components: {
       Kanban
     },
     data() {
       return {
         group: 'mission',
-        inbox: [
-          { name: 'Mission', id: 1 },
-          { name: 'Mission', id: 2 },
-          { name: 'Mission', id: 3 },
-          { name: 'Mission', id: 4 }
-        ],
-        todo: [
-          { name: 'Mission', id: 5 },
-          { name: 'Mission', id: 6 },
-          { name: 'Mission', id: 7 }
-        ],
-        doing: [
-          { name: 'Mission', id: 8 },
-          { name: 'Mission', id: 9 },
-          { name: 'Mission', id: 10 }
-        ],
-        done: [
-          { name: 'Mission', id: 11 },
-          { name: 'Mission', id: 12 },
-          { name: 'Mission', id: 13 },
-          { name: 'Mission', id: 14 }
-        ]
+        inbox: [],
+        todo: [],
+        doing: [],
+        done: []
       }
     },
     async created(){

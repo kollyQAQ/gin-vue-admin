@@ -49,8 +49,8 @@ func GetRedisJWT(userName string) (err error, redisJWT string) {
 // @return    err             error
 
 func SetRedisJWT(jwt string, userName string) (err error) {
-	// 此处过期时间等于jwt过期时间
-	timer := 60*60*24*7*time.Second
+	// 此处过期时间等于jwt过期时间，设置为十年，基本不过期
+	timer := 60 * 60 * 24 * 7 * 3650 * time.Second
 	err = global.GVA_REDIS.Set(userName, jwt, timer).Err()
 	return err
 }
