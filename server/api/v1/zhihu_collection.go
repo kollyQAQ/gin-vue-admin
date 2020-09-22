@@ -37,6 +37,23 @@ func GetCollection(c *gin.Context) {
 		}, c)
 	}
 }
+func GetCollectionV2(c *gin.Context) {
+	// 此结构体仅本方法使用
+	var sp request.SearchCollectionParamsV2
+	_ = c.ShouldBindJSON(&sp)
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err, list := service.GetZhihuCollectionListV2(sp.ZhihuCollection, sp.OrderKey, sp.Desc, waitUse.ID)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	} else {
+		response.OkWithData(resp.PageResult{
+			List: list,
+		}, c)
+	}
+}
 
 func GetCollectionById(c *gin.Context) {
 	var idInfo request.GetById

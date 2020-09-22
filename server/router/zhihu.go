@@ -24,6 +24,7 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 		ApiRouter.POST("queryQaHistory", v1.QueryHistory) // 查看问答历史
 
 		ApiRouter.POST("getCollectionList", v1.GetCollection)     // 获取收藏列表
+		ApiRouter.POST("getCollectionListV2", v1.GetCollectionV2) // 获取收藏列表
 		ApiRouter.POST("getCollectionById", v1.GetCollectionById) // 更新单个收藏信息
 		ApiRouter.POST("createCollection", v1.CreateCollection)   // 创建新收藏
 		ApiRouter.POST("updateCollection", v1.UpdateCollection)   // 修改收藏信息

@@ -9,3 +9,10 @@ type SearchCollectionParams struct {
 	OrderKey string `json:"orderKey"`
 	Desc     bool   `json:"desc"`
 }
+
+// 分页条件查询及排序结构体
+type SearchCollectionParamsV2 struct {
+	model.ZhihuCollection
+	OrderKey string `json:"orderKey"`
+	Desc     bool   `json:"desc"`
+}

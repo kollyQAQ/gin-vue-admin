@@ -8,6 +8,14 @@ export const getCollectionList = (data) => {
     })
 }
 
+export const getCollectionListV2 = (data) => {
+    return service({
+        url: "/zhihu/getCollectionListV2",
+        method: 'post',
+        data
+    })
+}
+
 export const getCollectionById = (data) => {
     return service({
         url: "/zhihu/getCollectionById",
