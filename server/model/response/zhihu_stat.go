@@ -16,7 +16,8 @@ type ZhihuStat struct {
 }
 
 type ZhihuSearchStat struct {
-	ArticleID string `json:"article_id"`
-	Remark    string `json:"remark"`
-	Rank      int    `json:"rank"`
+	ArticleID  string `json:"article_id"`
+	Remark     string `json:"remark"`
+	Rank       int    `json:"rank"`
+	UpdateTime string `json:"update_time"`
 }

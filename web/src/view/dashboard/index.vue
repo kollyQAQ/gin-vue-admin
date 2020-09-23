@@ -27,6 +27,7 @@
                      <el-table :data="searchStatData" border stripe>
                          <el-table-column label="标题" min-width="100" prop="remark"></el-table-column>
                          <el-table-column label="排名" min-width="100" prop="rank"></el-table-column>
+                         <el-table-column label="更新时间" min-width="200" prop="update_time"></el-table-column>
                      </el-table>
                  </div>
                  <div class="mid">

@@ -95,7 +95,7 @@ func QueryStat(userID uint) (err error, data resp.ZhihuStat) {
 
 func QuerySearchStat(userID uint) (err error, list []*resp.ZhihuSearchStat) {
 	querySql := `
-		SELECT article_id, remark, rank
+		SELECT article_id, remark, rank, update_time
 		FROM t_zhihu_search
 		WHERE user_id = ?;
 	`
