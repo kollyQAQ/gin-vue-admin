@@ -16,3 +16,11 @@ type SearchCollectionParamsV2 struct {
 	OrderKey string `json:"orderKey"`
 	Desc     bool   `json:"desc"`
 }
+
+// 分页条件查询及排序结构体
+type SearchLogParams struct {
+	model.ZhihuLog
+	PageInfo
+	OrderKey string `json:"orderKey"`
+	Desc     bool   `json:"desc"`
+}

@@ -37,6 +37,7 @@ func GetCollection(c *gin.Context) {
 		}, c)
 	}
 }
+
 func GetCollectionV2(c *gin.Context) {
 	// 此结构体仅本方法使用
 	var sp request.SearchCollectionParamsV2

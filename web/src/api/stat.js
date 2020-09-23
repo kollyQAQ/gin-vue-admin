@@ -1,5 +1,13 @@
 import service from '@/utils/request'
 
+export const queryLog = (data) => {
+    return service({
+        url: "/zhihu/queryLog",
+        method: 'post',
+        data
+    })
+}
+
 export const queryStat = (data) => {
     return service({
         url: "/zhihu/queryStat",

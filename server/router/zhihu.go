@@ -32,6 +32,7 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 		ApiRouter.POST("deleteCollection", v1.DeleteCollection)   // 删除收藏
 
 		ApiRouter.POST("queryStat", v1.QueryStat) // 统计数据
+		ApiRouter.POST("queryLog", v1.QueryLog)   // 日志数据
 
 		ApiRouter.POST("queryMusicList", v1.GetMusicList) // 查询Music列表
 

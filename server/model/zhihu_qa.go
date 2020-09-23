@@ -78,3 +78,15 @@ type ZhihuQaStat struct {
 	Answer     int    `json:"answer"`
 	CardAnswer int    `json:"card_answer"`
 }
+
+type ZhihuLog struct {
+	ID         int    `gorm:"primary_key"`
+	Type       string `json:"type"`
+	Event      string `json:"event"`
+	Msg        string `json:"msg"`
+	UpdateTime string `json:"update_time"`
+}
+
+func (ZhihuLog) TableName() string {
+	return "t_zhihu_log"
+}

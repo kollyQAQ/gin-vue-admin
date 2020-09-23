@@ -7,9 +7,33 @@ import (
 	"gin-vue-admin/model/request"
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
+	"gin-vue-admin/utils"
 
 	"github.com/gin-gonic/gin"
 )
+
+func QueryLog(c *gin.Context) {
+	// 此结构体仅本方法使用
+	var sp request.SearchLogParams
+	_ = c.ShouldBindJSON(&sp)
+	PageVerifyErr := utils.Verify(sp.PageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
+		response.FailWithMessage(PageVerifyErr.Error(), c)
+		return
+	}
+
+	err, list, total := service.GetLogList(sp.ZhihuLog, sp.PageInfo)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	} else {
+		response.OkWithData(resp.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     sp.PageInfo.Page,
+			PageSize: sp.PageInfo.PageSize,
+		}, c)
+	}
+}
 
 func QueryStat(c *gin.Context) {
 	claims, _ := c.Get("claims")
@@ -23,11 +47,6 @@ func QueryStat(c *gin.Context) {
 	err2, data := service.QueryStat(waitUse.ID)
 	if err2 != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err2), c)
-	}
-
-	typeMap := service.GetQuestionTypeMap()
-	for _, item := range list {
-		item.TypeDesc = typeMap[item.Type]
 	}
 
 	response.OkWithData(resp.ZhihuStatResponse{
