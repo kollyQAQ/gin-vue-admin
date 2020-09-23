@@ -24,6 +24,10 @@
                              </template>
                          </el-table-column>
                      </el-table>
+                     <el-table :data="searchStatData" border stripe>
+                         <el-table-column label="标题" min-width="100" prop="remark"></el-table-column>
+                         <el-table-column label="排名" min-width="100" prop="rank"></el-table-column>
+                     </el-table>
                  </div>
                  <div class="mid">
                      <el-row :gutter="20">
@@ -37,11 +41,6 @@
                                  <stackMap />
                              </div>
                          </el-col>
-<!--                         <el-col :xs="24" :sm="24" :lg="8">-->
-<!--                             <div class="chart-wrapper">-->
-<!--                                 <Sunburst/>-->
-<!--                             </div>-->
-<!--                         </el-col>-->
                      </el-row>
                  </div>
                  <div class="top">
@@ -103,6 +102,7 @@ export default {
     async created(){
         const res = await queryStat();
         this.qaStatData = res.data.qa_stat;
+        this.searchStatData = res.data.search_stat;
     },
   mounted() {
       let myChart = echarts.init(document.getElementById('main'),'macarons');

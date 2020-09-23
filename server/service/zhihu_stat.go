@@ -92,3 +92,14 @@ func QueryStat(userID uint) (err error, data resp.ZhihuStat) {
 
 	return err, data
 }
+
+func QuerySearchStat(userID uint) (err error, list []*resp.ZhihuSearchStat) {
+	querySql := `
+		SELECT article_id, remark, rank
+		FROM t_zhihu_search
+		WHERE user_id = ?;
+	`
+	err = global.GVA_DB.Debug().Raw(querySql, userID).Scan(&list).Error
+
+	return err, list
+}

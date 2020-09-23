@@ -49,9 +49,15 @@ func QueryStat(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err2), c)
 	}
 
+	err3, searchData := service.QuerySearchStat(waitUse.ID)
+	if err3 != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err2), c)
+	}
+
 	response.OkWithData(resp.ZhihuStatResponse{
-		QaStat: list,
-		Stat:   data,
+		QaStat:     list,
+		Stat:       data,
+		SearchStat: searchData,
 	}, c)
 
 }
