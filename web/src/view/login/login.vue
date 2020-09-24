@@ -8,7 +8,7 @@
         <div class="header">
           <a href="/">
             <!-- <img src="~@/assets/logo.png" class="logo" alt="logo" /> -->
-            <span class="title">Zhihu-Data</span>
+            <span class="title">知乎管理后台</span>
           </a>
         </div>
       </div>
