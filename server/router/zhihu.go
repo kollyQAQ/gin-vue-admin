@@ -32,7 +32,6 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 		ApiRouter.POST("deleteCollection", v1.DeleteCollection)   // 删除收藏
 
 		ApiRouter.POST("queryStat", v1.QueryStat) // 统计数据
-		ApiRouter.POST("queryLog", v1.QueryLog)   // 日志数据
 
 		ApiRouter.POST("queryMusicList", v1.GetMusicList) // 查询Music列表
 
@@ -44,5 +43,10 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 		ApiRouter.POST("addTodo", v1.AddTodo)           // 添加TODO
 		ApiRouter.POST("updateTodo", v1.UpdateTodo)     // 更新TODO
 		ApiRouter.POST("deleteTodo", v1.DeleteTodo)     // 删除TODO
+	}
+
+	ApiRouter2 := Router.Group("zhihu")
+	{
+		ApiRouter2.POST("queryLog", v1.QueryLog) // 日志数据
 	}
 }
