@@ -9,7 +9,7 @@ import (
 
 // @title Swagger Example API
 // @version 0.0.1
-// @description This is a sample Server pets
+// @description This is a sample Server petsddd对对对对对对
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name x-token

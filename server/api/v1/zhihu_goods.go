@@ -56,7 +56,7 @@ func GetGoodsCategory(c *gin.Context) {
 	}
 }
 
-func GetGoodsById(c *gin.Context) {
+func GetGoodsByID(c *gin.Context) {
 	var idInfo request.GetById
 	_ = c.ShouldBindJSON(&idInfo)
 	IdVerifyErr := utils.Verify(idInfo, utils.CustomizeMap["IdVerify"])
@@ -65,11 +65,28 @@ func GetGoodsById(c *gin.Context) {
 		return
 	}
 
-	err, goods := service.GetGoodsById(idInfo.Id)
+	err, goods := service.GetGoodsByID(idInfo.Id)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
 		response.OkWithData(resp.ZhihuGoodsResponse{Goods: goods}, c)
+	}
+}
+
+func GetGoodsBySkuID(c *gin.Context) {
+	var idInfo request.GetByIdStr
+	_ = c.ShouldBindJSON(&idInfo)
+	IdVerifyErr := utils.Verify(idInfo, utils.CustomizeMap["IdVerify"])
+	if IdVerifyErr != nil {
+		response.FailWithMessage(IdVerifyErr.Error(), c)
+		return
+	}
+
+	err, goods := service.GetGoodsBySkuID(idInfo.Id)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	} else {
+		response.OkWithData(goods, c)
 	}
 }
 

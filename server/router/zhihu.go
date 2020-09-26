@@ -12,13 +12,13 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 	{
 		ApiRouter.POST("getGoodsList", v1.GetGoodsList)         // 获取商品列表
 		ApiRouter.POST("getGoodsCategory", v1.GetGoodsCategory) // 获取商品类目
-		ApiRouter.POST("getGoodsById", v1.GetGoodsById)         // 获取单个商品信息
+		ApiRouter.POST("getGoodsById", v1.GetGoodsByID)         // 获取单个商品信息
 		ApiRouter.POST("createGoods", v1.CreateGoods)           // 创建新商品
 		ApiRouter.POST("updateGoods", v1.UpdateGoods)           // 修改商品信息
 		ApiRouter.POST("deleteGoods", v1.DeleteGoods)           // 删除商品
 
 		ApiRouter.POST("getQaList", v1.GetQuestionAnswer) // 获取问答列表
-		ApiRouter.POST("getQaById", v1.GetQaById)         // 获取单个问答信息
+		ApiRouter.POST("getQaById", v1.GetQaByID)         // 获取单个问答信息
 		ApiRouter.POST("createQa", v1.CreateQa)           // 创建新问答
 		ApiRouter.POST("updateQa", v1.UpdateQa)           // 修改问答信息
 		ApiRouter.POST("deleteQa", v1.DeleteQa)           // 删除问答
@@ -47,7 +47,8 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 
 	ApiRouter2 := Router.Group("zhihu")
 	{
-		ApiRouter2.POST("queryLog", v1.QueryLog)     // 日志数据
-		ApiRouter2.POST("getQaByQid", v1.GetQaByQid) // 根据 qid 查询问题信息
+		ApiRouter2.POST("queryLog", v1.QueryLog)             // 日志数据
+		ApiRouter2.POST("getQaByQid", v1.GetQaByQid)         // 根据 qid 查询问题信息
+		ApiRouter2.POST("getGoodsBySku", v1.GetGoodsBySkuID) // 根据 sku 查询佣金信息
 	}
 }

@@ -59,7 +59,7 @@ func GetQaByQid(id string) (err error, qa model.ZhihuQuestionAnswer) {
 	return
 }
 
-func UpdateAnswer(qid, aid, withCard string, userID uint) (err error) {
+func InsertOrUpdateAnswer(qid, aid, withCard string, userID uint) (err error) {
 	find := model.ZhihuAnswer{Qid: qid, UserID: userID}
 	update := model.ZhihuAnswer{Aid: aid, WithCard: withCard}
 	insert := model.ZhihuAnswer{Qid: qid, UserID: userID, Aid: aid, WithCard: withCard}
@@ -68,7 +68,6 @@ func UpdateAnswer(qid, aid, withCard string, userID uint) (err error) {
 	//global.GVA_DB.Model(&model.ZhihuAnswer{}).
 
 	return global.GVA_DB.Where(find).Assign(update).FirstOrCreate(&insert).Error
-
 }
 
 func CreateQuestion(question model.ZhihuQuestion, userID uint) (err error) {

@@ -38,7 +38,7 @@ func GetQuestionAnswer(c *gin.Context) {
 	}
 }
 
-func GetQaById(c *gin.Context) {
+func GetQaByID(c *gin.Context) {
 	var idInfo request.GetByIdStr
 	_ = c.ShouldBindJSON(&idInfo)
 	IdVerifyErr := utils.Verify(idInfo, utils.CustomizeMap["IdVerify"])
@@ -74,7 +74,7 @@ func UpdateQa(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	waitUse := claims.(*request.CustomClaims)
 
-	err := service.UpdateAnswer(qa.Qid, qa.Aid, qa.WithCard, waitUse.ID)
+	err := service.InsertOrUpdateAnswer(qa.Qid, qa.Aid, qa.WithCard, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("修改数据失败，%v", err), c)
 	} else {
@@ -110,7 +110,7 @@ func CreateQa(c *gin.Context) {
 	}
 
 	if param.Aid != "" {
-		err = service.UpdateAnswer(param.Qid, param.Aid, param.WithCard, waitUse.ID)
+		err = service.InsertOrUpdateAnswer(param.Qid, param.Aid, param.WithCard, waitUse.ID)
 		if err != nil {
 			response.FailWithMessage(fmt.Sprintf("创建回答失败，%v", err), c)
 		}

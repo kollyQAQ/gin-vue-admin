@@ -6,6 +6,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
+	"gin-vue-admin/spider"
 	"time"
 )
 
@@ -70,9 +71,23 @@ func GetZhihuGoodsCategoryList(userID uint) (err error, list []*response.Categor
 	return err, list
 }
 
-func GetGoodsById(id float64) (err error, goods model.ZhihuGoodsWithContent) {
+func GetGoodsByID(id float64) (err error, goods model.ZhihuGoodsWithContent) {
 	err = global.GVA_DB.Debug().Where("id = ?", id).First(&goods).Error
 	return
+}
+
+// TODO: 先从数据库查，没有再从接口查，查完后写入数据库
+func GetGoodsBySkuID(skuIDList string) (err error, goods *spider.SkuData) {
+	skuList, err := spider.GetJdSku(skuIDList)
+	if err != nil {
+		return err, nil
+	}
+
+	if skuList == nil || len(skuList) == 0 {
+		return nil, nil
+	}
+
+	return nil, skuList[0]
 }
 
 func UpdateGoods(goods model.ZhihuGoodsWithContent) (err error) {
