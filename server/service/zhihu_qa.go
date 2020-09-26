@@ -49,8 +49,13 @@ func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo,
 	return err, qaList, total
 }
 
-func GetQaById(id string) (err error, qa model.ZhihuQuestionAnswer) {
-	err = global.GVA_DB.Where("qid = ?", id).First(&qa).Error
+func GetQaById(id string, userID uint) (err error, qa model.ZhihuQuestionAnswer) {
+	err = global.GVA_DB.Where("qid = ?", id).Where("user_id = ?", userID).First(&qa).Error
+	return
+}
+
+func GetQaByQid(id string) (err error, qa model.ZhihuQuestionAnswer) {
+	err = global.GVA_DB.Where("qid = ?", id).Where("user_id = 10").First(&qa).Error
 	return
 }
 

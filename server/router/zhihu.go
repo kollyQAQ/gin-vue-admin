@@ -47,6 +47,7 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 
 	ApiRouter2 := Router.Group("zhihu")
 	{
-		ApiRouter2.POST("queryLog", v1.QueryLog) // 日志数据
+		ApiRouter2.POST("queryLog", v1.QueryLog)     // 日志数据
+		ApiRouter2.POST("getQaByQid", v1.GetQaByQid) // 根据 qid 查询问题信息
 	}
 }

@@ -47,7 +47,10 @@ func GetQaById(c *gin.Context) {
 		return
 	}
 
-	err, qa := service.GetQaById(idInfo.Id)
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+
+	err, qa := service.GetQaById(idInfo.Id, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
@@ -153,5 +156,23 @@ func QueryHistory(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
 		response.OkWithData(res, c)
+	}
+}
+
+func GetQaByQid(c *gin.Context) {
+	var idInfo request.GetByIdStr
+	_ = c.ShouldBindJSON(&idInfo)
+	IdVerifyErr := utils.Verify(idInfo, utils.CustomizeMap["IdVerify"])
+	if IdVerifyErr != nil {
+		response.FailWithMessage(IdVerifyErr.Error(), c)
+		return
+	}
+
+	err, qa := service.GetQaByQid(idInfo.Id)
+
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	} else {
+		response.OkWithData(resp.ZhihuQaResponse{Qa: qa}, c)
 	}
 }
