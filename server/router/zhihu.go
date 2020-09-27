@@ -35,7 +35,9 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 
 		ApiRouter.POST("queryMusicList", v1.GetMusicList) // 查询Music列表
 
-		ApiRouter.POST("queryPlanList", v1.GetPlanList) // 查询TODO列表
+		ApiRouter.POST("queryPlanList", v1.GetPlanList) // 查询开发计划列表
+		ApiRouter.POST("addPlan", v1.AddPlan)           // 添加开发任务
+		ApiRouter.POST("updatePlan", v1.UpdatePlan)     // 更新开发任务
 
 		ApiRouter.POST("queryTypeList", v1.GetTypeList) // 查询 type 列表
 

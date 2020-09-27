@@ -32,6 +32,22 @@ export const queryPlanList = (data) => {
     })
 }
 
+export const addPlan = (data) => {
+    return service({
+        url: "/zhihu/addPlan",
+        method: 'post',
+        data
+    })
+}
+
+export const updatePlan = (data) => {
+    return service({
+        url: "/zhihu/updatePlan",
+        method: 'post',
+        data
+    })
+}
+
 export const queryTodoList = (data) => {
     return service({
         url: "/zhihu/queryTodoList",

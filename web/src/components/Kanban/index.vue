@@ -10,7 +10,9 @@
       :set-data="setData"
     >
       <div v-for="element in list" :key="element.id" class="board-item">
-        {{ element.name }}
+        <p v-if="element.level===2" style="color:blue;">{{ element.name }}</p>
+        <p v-else-if="element.level===3" style="color:red;">{{ element.name }}</p>
+        <p v-else>{{ element.name }}</p>
       </div>
     </draggable>
   </div>
@@ -18,6 +20,9 @@
 
 <script>
   import draggable from 'vuedraggable'
+  import {
+    updatePlan,
+  } from '@/api/stat'
 
   export default {
     name: 'DragKanbanDemo',
@@ -35,6 +40,10 @@
           return {}
         }
       },
+      status: {
+        type: String,
+        default: '0'
+      },
       list: {
         type: Array,
         default() {
@@ -42,8 +51,17 @@
         }
       }
     },
-    updated() {
+    async updated() {
+      console.log(this.headerText, this.status)
       console.log(this.list)
+      const res = await updatePlan({"status":this.status, "data":this.list})
+      if (res.code === 0) {
+        this.$message({
+          type: 'success',
+          message: '更新成功',
+          showClose: true
+        })
+      }
     },
     methods: {
       setData(dataTransfer) {

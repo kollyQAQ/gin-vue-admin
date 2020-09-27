@@ -75,7 +75,11 @@ func GetMusicList(c *gin.Context) {
 func GetPlanList(c *gin.Context) {
 	err, list := service.GetPlanList()
 
-	var todo, doing, done, inbox []*model.ZhihuPlan
+	inbox := make([]*model.ZhihuPlan, 0)
+	todo := make([]*model.ZhihuPlan, 0)
+	doing := make([]*model.ZhihuPlan, 0)
+	done := make([]*model.ZhihuPlan, 0)
+
 	for _, item := range list {
 		if item.Status == 0 {
 			inbox = append(inbox, item)
@@ -97,6 +101,30 @@ func GetPlanList(c *gin.Context) {
 			Doing: doing,
 			Done:  done,
 		}, c)
+	}
+}
+
+func AddPlan(c *gin.Context) {
+	var plan model.ZhihuPlan
+	_ = c.ShouldBindJSON(&plan)
+
+	err := service.AddPlan(plan)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+}
+
+func UpdatePlan(c *gin.Context) {
+	var param request.UpdatePlanParams
+	_ = c.ShouldBindJSON(&param)
+
+	err := service.UpdatePlan(param.Status, param.Data)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("更新数据失败，%v", err), c)
+	} else {
+		response.OkWithMessage("更新数据成功", c)
 	}
 }
 

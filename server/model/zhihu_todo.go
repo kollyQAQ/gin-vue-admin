@@ -18,6 +18,7 @@ type ZhihuPlan struct {
 	Type   int    `json:"type"`
 	Text   string `json:"name"`
 	Status int    `json:"status"`
+	Level  int    `json:"level"`
 	Remark string `json:"remark"`
 }
 
