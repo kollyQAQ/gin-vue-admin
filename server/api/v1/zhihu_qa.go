@@ -160,15 +160,10 @@ func QueryHistory(c *gin.Context) {
 }
 
 func GetQaByQid(c *gin.Context) {
-	var idInfo request.GetByIdStr
-	_ = c.ShouldBindJSON(&idInfo)
-	IdVerifyErr := utils.Verify(idInfo, utils.CustomizeMap["IdVerify"])
-	if IdVerifyErr != nil {
-		response.FailWithMessage(IdVerifyErr.Error(), c)
-		return
-	}
+	var param request.GetQaByQidParams
+	_ = c.ShouldBindJSON(&param)
 
-	err, qa := service.GetQaByQid(idInfo.Id)
+	err, qa := service.GetQaByQid(param.Qid, param.UserID)
 
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)

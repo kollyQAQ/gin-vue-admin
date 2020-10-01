@@ -54,8 +54,8 @@ func GetQaById(id string, userID uint) (err error, qa model.ZhihuQuestionAnswer)
 	return
 }
 
-func GetQaByQid(id string) (err error, qa model.ZhihuQuestionAnswer) {
-	err = global.GVA_DB.Where("qid = ?", id).Where("user_id = 10").First(&qa).Error
+func GetQaByQid(qid string, userID int) (err error, qa model.ZhihuQuestionAnswer) {
+	err = global.GVA_DB.Where("qid = ?", qid).Where("user_id = ?", userID).First(&qa).Error
 	return
 }
 
