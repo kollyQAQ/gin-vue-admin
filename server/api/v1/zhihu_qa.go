@@ -119,6 +119,39 @@ func CreateQa(c *gin.Context) {
 	response.OkWithMessage("创建问答成功", c)
 }
 
+func CreateQuestion(c *gin.Context) {
+	var param request.CreateQuestionParams
+	_ = c.ShouldBindJSON(&param)
+
+	ApiVerify := utils.Rules{
+		"Qid": {utils.NotEmpty()},
+	}
+	ApiVerifyErr := utils.Verify(param, ApiVerify)
+	if ApiVerifyErr != nil {
+		response.FailWithMessage(ApiVerifyErr.Error(), c)
+		return
+	}
+
+	question := model.ZhihuQuestion{
+		Qid:  param.Qid,
+		Type: param.Type,
+	}
+
+	err := service.CreateQuestion(question, param.UserID)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("创建问题失败，%v", err), c)
+	}
+
+	if param.Aid != "" {
+		err = service.InsertOrUpdateAnswer(param.Qid, param.Aid, param.WithCard, param.UserID)
+		if err != nil {
+			response.FailWithMessage(fmt.Sprintf("创建回答失败，%v", err), c)
+		}
+	}
+
+	response.OkWithMessage("创建问答成功", c)
+}
+
 func DeleteQa(c *gin.Context) {
 	var a model.ZhihuQuestionSub
 	_ = c.ShouldBindJSON(&a)

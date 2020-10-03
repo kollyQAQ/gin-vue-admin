@@ -18,6 +18,14 @@ type CreateQaParams struct {
 	WithCard string `json:"with_card"`
 }
 
+type CreateQuestionParams struct {
+	UserID   uint   `json:"user_id"`
+	Qid      string `json:"qid"`
+	Type     int    `json:"type"`
+	Aid      string `json:"aid"`
+	WithCard string `json:"with_card"`
+}
+
 type GetQaByQidParams struct {
 	Qid    string `json:"qid"`
 	UserID int    `json:"user_id"`
