@@ -82,6 +82,18 @@ func UpdateQa(c *gin.Context) {
 	}
 }
 
+func UpdateAnswer(c *gin.Context) {
+	var param request.UpdateAnswerParams
+	_ = c.ShouldBindJSON(&param)
+
+	err := service.InsertOrUpdateAnswer(param.Qid, param.Aid, param.WithCard, param.UserID)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("修改数据失败，%v", err), c)
+	} else {
+		response.OkWithMessage("修改数据成功", c)
+	}
+}
+
 func CreateQa(c *gin.Context) {
 	var param request.CreateQaParams
 	_ = c.ShouldBindJSON(&param)

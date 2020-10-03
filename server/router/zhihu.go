@@ -53,5 +53,6 @@ func InitZhihuRouter(Router *gin.RouterGroup) {
 		ApiRouter2.POST("getQaByQid", v1.GetQaByQid)         // 根据 qid 查询问题信息
 		ApiRouter2.POST("getGoodsBySku", v1.GetGoodsBySkuID) // 根据 sku 查询佣金信息
 		ApiRouter2.POST("createQuestion", v1.CreateQuestion) // 创建新问答
+		ApiRouter2.POST("updateAnswer", v1.UpdateAnswer)     // 修改问答信息
 	}
 }
