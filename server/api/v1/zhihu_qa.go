@@ -119,12 +119,14 @@ func CreateQa(c *gin.Context) {
 	err := service.CreateQuestion(question, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建问题失败，%v", err), c)
+		return
 	}
 
 	if param.Aid != "" {
 		err = service.InsertOrUpdateAnswer(param.Qid, param.Aid, param.WithCard, waitUse.ID)
 		if err != nil {
 			response.FailWithMessage(fmt.Sprintf("创建回答失败，%v", err), c)
+			return
 		}
 	}
 
@@ -152,12 +154,14 @@ func CreateQuestion(c *gin.Context) {
 	err := service.CreateQuestion(question, param.UserID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建问题失败，%v", err), c)
+		return
 	}
 
 	if param.Aid != "" {
 		err = service.InsertOrUpdateAnswer(param.Qid, param.Aid, param.WithCard, param.UserID)
 		if err != nil {
 			response.FailWithMessage(fmt.Sprintf("创建回答失败，%v", err), c)
+			return
 		}
 	}
 

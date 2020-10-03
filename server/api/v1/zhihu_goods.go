@@ -137,14 +137,7 @@ func CreateGoods(c *gin.Context) {
 func DeleteGoods(c *gin.Context) {
 	var a model.ZhihuGoods
 	_ = c.ShouldBindJSON(&a)
-	//ApiVerify := utils.Rules{
-	//	"ID": {utils.NotEmpty()},
-	//}
-	//ApiVerifyErr := utils.Verify(a.Model, ApiVerify)
-	//if ApiVerifyErr != nil {
-	//	response.FailWithMessage(ApiVerifyErr.Error(), c)
-	//	return
-	//}
+
 	err := service.DeleteGoods(a)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
