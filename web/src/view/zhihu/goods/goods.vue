@@ -64,7 +64,7 @@
           <p v-if="scope.row.jd_sale == 0"><i class="el-icon-error"></i></p>
         </template>
       </el-table-column>
-
+      <el-table-column label="最后更新时间" min-width="100" prop="update_time"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="editGoods(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>

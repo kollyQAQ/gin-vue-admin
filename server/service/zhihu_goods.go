@@ -48,10 +48,10 @@ func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order stri
 			} else {
 				OrderStr = order
 			}
-			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, order_num, jd_sale, cid3_name").
+			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, order_num, jd_sale, cid3_name, date_format(update_time, '%Y-%m-%d %H:%i') as update_time").
 				Order(OrderStr, true).Find(&goodsList).Error
 		} else {
-			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, order_num, jd_sale, cid3_name").
+			err = db.Debug().Select("id, sku_id, sku_name, price, fee_rate, fee, order_num, jd_sale, cid3_name, date_format(update_time, '%Y-%m-%d %H:%i') as update_time").
 				Order("fee_rate desc", true).Find(&goodsList).Error
 		}
 	}

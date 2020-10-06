@@ -8,7 +8,7 @@ import (
 )
 
 func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo, order string,
-	desc bool, userID uint) (err error, list interface{}, total int) {
+	desc bool, answer, withCard string, userID uint) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&model.ZhihuQuestionAnswer{})
@@ -28,6 +28,18 @@ func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo,
 		db = db.Where("qname LIKE ?", "%"+qa.Qname+"%")
 	}
 
+	if answer == "0" {
+		db = db.Where("aid = ''")
+	}
+
+	if answer == "1" {
+		db = db.Where("aid != ''")
+	}
+
+	if withCard != "" {
+		db = db.Where("with_card = ?", withCard)
+	}
+
 	err = db.Count(&total).Error
 
 	if err != nil {
@@ -41,9 +53,11 @@ func GetZhihuQuestionAnswer(qa model.ZhihuQuestionAnswer, info request.PageInfo,
 			} else {
 				OrderStr = order
 			}
-			err = db.Debug().Order(OrderStr, true).Find(&qaList).Error
+			err = db.Debug().Select("id,aid,answer_total,like_num,qid,qname,rank,sub_id,three_day_add_view,today_add_answer,today_add_view,type,view_total,with_card,date_format(update_time, '%Y-%m-%d %H:%i') as update_time").
+				Order(OrderStr, true).Find(&qaList).Error
 		} else {
-			err = db.Debug().Order("today_add_view desc", true).Find(&qaList).Error
+			err = db.Debug().Select("id,aid,answer_total,like_num,qid,qname,rank,sub_id,three_day_add_view,today_add_answer,today_add_view,type,view_total,with_card,date_format(update_time, '%Y-%m-%d %H:%i') as update_time").
+				Order("today_add_view desc", true).Find(&qaList).Error
 		}
 	}
 	return err, qaList, total

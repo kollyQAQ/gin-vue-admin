@@ -18,6 +18,18 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="是否回答">
+          <el-select clearable placeholder="请选择" v-model="searchInfo.answer">
+            <el-option label="是" value=1></el-option>
+            <el-option label="否" value=0></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否带货">
+          <el-select clearable placeholder="请选择" v-model="searchInfo.with_card">
+            <el-option label="是" value=1></el-option>
+            <el-option label="否" value=0></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -67,6 +79,7 @@
           <p v-if="scope.row.with_card == 0"><i class="el-icon-error"></i></p>
         </template>
       </el-table-column>
+      <el-table-column label="最后更新时间" min-width="100" prop="update_time"></el-table-column>
       <el-table-column fixed="right" label="操作" width="250">
         <template slot-scope="scope">
           <el-button @click="editQa(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>

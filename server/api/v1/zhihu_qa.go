@@ -25,7 +25,7 @@ func GetQuestionAnswer(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	waitUse := claims.(*request.CustomClaims)
 
-	err, list, total := service.GetZhihuQuestionAnswer(sp.ZhihuQuestionAnswer, sp.PageInfo, sp.OrderKey, sp.Desc, waitUse.ID)
+	err, list, total := service.GetZhihuQuestionAnswer(sp.ZhihuQuestionAnswer, sp.PageInfo, sp.OrderKey, sp.Desc, sp.Answer, sp.WithCard, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {

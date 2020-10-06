@@ -23,7 +23,7 @@ func GetLogList(c model.ZhihuLog, info request.PageInfo) (err error, list interf
 		return err, collectionList, total
 	} else {
 		db = db.Limit(limit).Offset(offset)
-		err = db.Debug().Select("id, type, event, msg, update_time").
+		err = db.Debug().Select("id, type, event, msg, date_format(update_time, '%Y-%m-%d %H:%i') as update_time").
 			Order("id desc", true).Find(&collectionList).Error
 	}
 
@@ -95,7 +95,7 @@ func QueryStat(userID uint) (err error, data resp.ZhihuStat) {
 
 func QuerySearchStat(userID uint) (err error, list []*resp.ZhihuSearchStat) {
 	querySql := `
-		SELECT article_id, remark, rank, update_time
+		SELECT article_id, remark, rank, date_format(update_time, '%Y-%m-%d %H:%i') as update_time
 		FROM t_zhihu_search
 		WHERE user_id = ?;
 	`

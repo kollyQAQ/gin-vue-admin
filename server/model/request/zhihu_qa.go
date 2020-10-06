@@ -8,6 +8,8 @@ type SearchQaParams struct {
 	PageInfo
 	OrderKey string `json:"orderKey"`
 	Desc     bool   `json:"desc"`
+	Answer   string `json:"answer"`
+	WithCard string `json:"with_card"`
 }
 
 type CreateQaParams struct {
