@@ -55,7 +55,7 @@ func GetJdSku(skuIDList string) ([]*SkuData, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(respJson)
+	//fmt.Println(respJson)
 
 	result := new(Result)
 	err = json.Unmarshal([]byte(respJson.Response.Result), result)
