@@ -43,7 +43,7 @@ func GetJdSku(skuIDList string) ([]*SkuData, error) {
 		return nil, err
 	}
 
-	fmt.Println(resp.String())
+	//fmt.Println(resp.String())
 
 	if resp.StatusCode != 200 {
 		fmt.Println(fmt.Sprintf("Status Code:%d Error:%v", resp.StatusCode, resp.Error))
