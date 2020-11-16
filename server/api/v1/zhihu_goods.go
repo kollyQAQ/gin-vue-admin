@@ -12,6 +12,62 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func GetHighRateGoodsList(c *gin.Context) {
+	// 此结构体仅本方法使用
+	var sp request.SearchHighRateGoodsParams
+	_ = c.ShouldBindJSON(&sp)
+	PageVerifyErr := utils.Verify(sp.PageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
+		response.FailWithMessage(PageVerifyErr.Error(), c)
+		return
+	}
+
+	err, list, total := service.GetZhihuHighRateGoodsList(sp.ZhihuHighRateGoods, sp.PageInfo, sp.OrderKey, sp.Desc)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取商品数据失败，%v", err), c)
+	} else {
+		err, category := service.GetZhihuThirdCategoryList()
+		if err != nil {
+			response.FailWithMessage(fmt.Sprintf("获取类目数据失败，%v", err), c)
+		} else {
+			response.OkWithData(resp.PageResult{
+				List:     list,
+				Category: category,
+				Total:    total,
+				Page:     sp.PageInfo.Page,
+				PageSize: sp.PageInfo.PageSize,
+			}, c)
+		}
+	}
+}
+
+func GetFirstCategory(c *gin.Context) {
+	err, category := service.GetZhihuFirstCategoryList()
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取类目数据失败，%v", err), c)
+	} else {
+		response.OkWithData(category, c)
+	}
+}
+
+func GetSecondCategory(c *gin.Context) {
+	err, category := service.GetZhihuSecondCategoryList()
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取类目数据失败，%v", err), c)
+	} else {
+		response.OkWithData(category, c)
+	}
+}
+
+func GetThirdCategory(c *gin.Context) {
+	err, category := service.GetZhihuThirdCategoryList()
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取类目数据失败，%v", err), c)
+	} else {
+		response.OkWithData(category, c)
+	}
+}
+
 func GetGoodsList(c *gin.Context) {
 	// 此结构体仅本方法使用
 	var sp request.SearchGoodsParams

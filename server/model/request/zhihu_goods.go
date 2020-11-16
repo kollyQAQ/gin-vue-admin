@@ -9,3 +9,10 @@ type SearchGoodsParams struct {
 	OrderKey string `json:"orderKey"`
 	Desc     bool   `json:"desc"`
 }
+
+type SearchHighRateGoodsParams struct {
+	model.ZhihuHighRateGoods
+	PageInfo
+	OrderKey string `json:"orderKey"`
+	Desc     bool   `json:"desc"`
+}

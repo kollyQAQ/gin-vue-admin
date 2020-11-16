@@ -1,5 +1,37 @@
 import service from '@/utils/request'
 
+export const getHighRateGoodsList = (data) => {
+    return service({
+        url: "/zhihu/getHighRateGoodsList",
+        method: 'post',
+        data
+    })
+}
+
+export const getFirstCategory = (data) => {
+    return service({
+        url: "/zhihu/getGoodsCategory",
+        method: 'post',
+        data
+    })
+}
+
+export const getSecondCategory = (data) => {
+    return service({
+        url: "/zhihu/getGoodsCategory",
+        method: 'post',
+        data
+    })
+}
+
+export const getThirdCategory = (data) => {
+    return service({
+        url: "/zhihu/getGoodsCategory",
+        method: 'post',
+        data
+    })
+}
+
 export const getGoodsList = (data) => {
     return service({
         url: "/zhihu/getGoodsList",

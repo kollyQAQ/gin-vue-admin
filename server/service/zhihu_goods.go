@@ -10,6 +10,48 @@ import (
 	"time"
 )
 
+func GetZhihuHighRateGoodsList(goods model.ZhihuHighRateGoods, info request.PageInfo, order string,
+	desc bool) (err error, list interface{}, total int) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB.Model(&model.ZhihuHighRateGoods{})
+	var goodsList []model.ZhihuHighRateGoods
+
+	if goods.GoodsName != "" {
+		db = db.Where("goods_name LIKE ?", "%"+goods.GoodsName+"%")
+	}
+
+	if goods.CategoryOne != "" {
+		db = db.Where("category_one LIKE ?", "%"+goods.CategoryOne+"%")
+	}
+
+	if goods.FeeRate > 0 {
+		db = db.Where("fee_rate >= ?", goods.FeeRate)
+	}
+
+	err = db.Debug().Count(&total).Error
+
+	if err != nil {
+		return err, goodsList, total
+	} else {
+		db = db.Limit(limit).Offset(offset)
+		if order != "" {
+			var OrderStr string
+			if desc {
+				OrderStr = order + " desc"
+			} else {
+				OrderStr = order
+			}
+			err = db.Debug().Select("id, goods_name, shop_name, url, category_one, category_two, category_three, price, fee, fee_rate").
+				Order(OrderStr, true).Find(&goodsList).Error
+		} else {
+			err = db.Debug().Select("id, id, goods_name, shop_name, url, category_one, category_two, category_three, price, fee, fee_rate").
+				Order("id asc", true).Find(&goodsList).Error
+		}
+	}
+	return err, goodsList, total
+}
+
 func GetZhihuGoodsList(goods model.ZhihuGoods, info request.PageInfo, order string,
 	desc bool, userID uint) (err error, list interface{}, total int) {
 	limit := info.PageSize
@@ -67,6 +109,45 @@ func GetZhihuGoodsCategoryList(userID uint) (err error, list []*response.Categor
 		ORDER BY COUNT(*) DESC;
 	`
 	err = global.GVA_DB.Raw(querySql, userID).Scan(&list).Error
+
+	return err, list
+}
+
+func GetZhihuFirstCategoryList() (err error, list []*response.Category) {
+	querySql := `
+		SELECT category_one as label, category_one as value
+		FROM t_jd_goods
+		WHERE category_one IS NOT NULL AND category_one != ''
+		GROUP BY category_one
+		ORDER BY COUNT(*) DESC;
+	`
+	err = global.GVA_DB.Raw(querySql).Scan(&list).Error
+
+	return err, list
+}
+
+func GetZhihuSecondCategoryList() (err error, list []*response.Category) {
+	querySql := `
+		SELECT category_two as label, category_two as value
+		FROM t_jd_goods
+		WHERE category_two IS NOT NULL AND category_two != ''
+		GROUP BY category_two
+		ORDER BY COUNT(*) DESC;
+	`
+	err = global.GVA_DB.Raw(querySql).Scan(&list).Error
+
+	return err, list
+}
+
+func GetZhihuThirdCategoryList() (err error, list []*response.Category) {
+	querySql := `
+		SELECT category_three as label, category_three as value
+		FROM t_jd_goods
+		WHERE category_three IS NOT NULL AND category_three != ''
+		GROUP BY category_three
+		ORDER BY COUNT(*) DESC;
+	`
+	err = global.GVA_DB.Raw(querySql).Scan(&list).Error
 
 	return err, list
 }

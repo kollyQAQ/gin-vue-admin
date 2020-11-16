@@ -10,6 +10,11 @@ import (
 func InitZhihuRouter(Router *gin.RouterGroup) {
 	ApiRouter := Router.Group("zhihu").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
+		ApiRouter.POST("getHighRateGoodsList", v1.GetHighRateGoodsList) // 获取高佣商品列表
+		ApiRouter.POST("getFirstCategory", v1.GetFirstCategory)         // 获取高佣商品一级类目
+		ApiRouter.POST("getSecondCategory", v1.GetSecondCategory)       // 获取高佣商品二级类目
+		ApiRouter.POST("getThirdCategory", v1.GetThirdCategory)         // 获取高佣商品三级类目
+
 		ApiRouter.POST("getGoodsList", v1.GetGoodsList)         // 获取商品列表
 		ApiRouter.POST("getGoodsCategory", v1.GetGoodsCategory) // 获取商品类目
 		ApiRouter.POST("getGoodsById", v1.GetGoodsByID)         // 获取单个商品信息

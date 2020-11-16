@@ -18,6 +18,23 @@ func (ZhihuGoods) TableName() string {
 	return "t_zhihu_goods"
 }
 
+type ZhihuHighRateGoods struct {
+	ID            uint    `gorm:"primary_key"`
+	GoodsName     string  `json:"goods_name"`
+	ShopName      string  `json:"shop_name"`
+	Url           string  `json:"url"`
+	CategoryOne   string  `json:"category_one"`
+	CategoryTwo   string  `json:"category_two"`
+	CategoryThree string  `json:"category_three"`
+	Price         float64 `json:"price"`
+	Fee           float64 `json:"fee"`
+	FeeRate       float64 `json:"fee_rate"`
+}
+
+func (ZhihuHighRateGoods) TableName() string {
+	return "t_jd_goods"
+}
+
 type ZhihuGoodsWithContent struct {
 	ID      uint   `gorm:"primary_key"`
 	SkuID   string `json:"sku_id"`
