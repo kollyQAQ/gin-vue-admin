@@ -113,10 +113,9 @@ func CreateQa(c *gin.Context) {
 	question := model.ZhihuQuestion{
 		Qid:   param.Qid,
 		Title: param.Qname,
-		Type:  param.Type,
 	}
 
-	err := service.CreateQuestion(question, waitUse.ID)
+	err := service.CreateQuestion(question, param.Type, waitUse.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建问题失败，%v", err), c)
 		return
@@ -147,11 +146,10 @@ func CreateQuestion(c *gin.Context) {
 	}
 
 	question := model.ZhihuQuestion{
-		Qid:  param.Qid,
-		Type: param.Type,
+		Qid: param.Qid,
 	}
 
-	err := service.CreateQuestion(question, param.UserID)
+	err := service.CreateQuestion(question, param.Type, param.UserID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建问题失败，%v", err), c)
 		return

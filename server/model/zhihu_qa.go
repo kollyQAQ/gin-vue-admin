@@ -24,7 +24,6 @@ func (ZhihuQuestionAnswer) TableName() string {
 
 type ZhihuQuestion struct {
 	ID          int    `gorm:"primary_key"`
-	Type        int    `json:"type"`
 	Qid         string `json:"qid"`
 	Title       string `json:"title"`
 	ViewTotal   int    `json:"view_total"`
@@ -40,6 +39,7 @@ type ZhihuQuestionSub struct {
 	ID     int    `gorm:"primary_key" json:"sub_id"`
 	UserID uint   `json:"-"`
 	Qid    string `json:"qid"`
+	Type   int    `json:"type"`
 }
 
 func (ZhihuQuestionSub) TableName() string {

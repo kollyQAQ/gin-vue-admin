@@ -84,7 +84,7 @@ func InsertOrUpdateAnswer(qid, aid, withCard string, userID uint) (err error) {
 	return global.GVA_DB.Where(find).Assign(update).FirstOrCreate(&insert).Error
 }
 
-func CreateQuestion(question model.ZhihuQuestion, userID uint) (err error) {
+func CreateQuestion(question model.ZhihuQuestion, qtype int, userID uint) (err error) {
 	findOne := global.GVA_DB.Where("qid = ?", question.Qid).Find(&model.ZhihuQuestion{}).Error
 	if findOne != nil {
 		err = global.GVA_DB.Create(&question).Error
@@ -93,6 +93,7 @@ func CreateQuestion(question model.ZhihuQuestion, userID uint) (err error) {
 	sub := &model.ZhihuQuestionSub{
 		UserID: userID,
 		Qid:    question.Qid,
+		Type:   qtype,
 	}
 
 	findOne = global.GVA_DB.Where("user_id = ?", sub.UserID).
